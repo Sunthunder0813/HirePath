@@ -17,7 +17,7 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('labacelemschool@gmail.com', 'Labac Elementary System');
+        $mail->setFrom('labacelemschool@gmail.com', 'Hire Path System');
         $mail->addAddress($to);
         $mail->Subject = $subject;
 
@@ -32,7 +32,7 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
                 </div>
                 <p style='font-size: 14px; color: #555;'>Please note that this OTP is valid for a limited time and should not be shared with anyone.</p>
                 <p>If you did not request this, please contact our support team immediately.</p>
-                <p style='margin-top: 20px;'>Best regards,<br><strong>Labac System Team</strong></p>
+                <p style='margin-top: 20px;'>Best regards,<br><strong>Hire Path Team</strong></p>
                 <hr style='border: none; border-top: 1px solid #ddd; margin: 20px 0;'>
                 <p style='font-size: 12px; color: #999;'>This is an automated email. Please do not reply to this message.</p>
             </div>
