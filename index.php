@@ -110,7 +110,7 @@ if (!$result) {
         <ul class="nav_links" id="nav_links" aria-label="Main navigation">
             <li><a href="employee_sign_in.php">Post a Job</a></li>
             <?php if (!empty($username)): ?>
-                <li><a href="application.php">Application</a></li>
+                <li><a href="pages/job_seeker/application.php">Application</a></li>
             <?php endif; ?>
             <?php if (!empty($username)): ?>
                 <li class="profile_dropdown">
