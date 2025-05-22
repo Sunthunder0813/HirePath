@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../db_connection/connection.php';
-include 'send_otp.php'; // Include the send_otp.php file
+include 'send_otp.php'; 
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: sign_in.php");
@@ -25,8 +25,8 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['send_otp'])) {
-        $otp = rand(100000, 999999); // Generate a 6-digit OTP
-        $_SESSION['otp'] = $otp; // Store OTP in session
+        $otp = rand(100000, 999999); 
+        $_SESSION['otp'] = $otp; 
 
         $subject = "Your OTP for Password Change";
         $error = null;
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($stmt->execute()) {
                         $success = "Password updated successfully.";
-                        unset($_SESSION['otp']); // Clear OTP from session
+                        unset($_SESSION['otp']); 
                     } else {
                         $error = "Failed to update password. Please try again.";
                     }
