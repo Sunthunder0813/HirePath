@@ -20,10 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT); 
             $conn = OpenConnection();
-
             
-            $conn->begin_transaction();
-
             try {
                 
                 $stmt = $conn->prepare("SELECT user_id FROM users WHERE email = ?");

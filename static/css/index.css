@@ -66,11 +66,7 @@ body {
             transition: background 0.3s ease, transform 0.2s ease;
             font-weight: bold;
         }
-
-        .nav_links a:hover {
-            background: #555;
-        }
-
+        
         .sign_out_button {
             padding: 10px 15px;
             border-radius: 5px;
