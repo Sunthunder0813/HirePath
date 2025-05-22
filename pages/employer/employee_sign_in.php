@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../static/img/icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../../static/css/employee_sign_in.css">
-    <title>Employer Login</title>
+    <title>Sign In - Employer Portal</title>
 </head>
 <body>
     <div class="left_section">
