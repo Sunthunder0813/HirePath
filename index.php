@@ -95,7 +95,7 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="img/icon/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="static/img/icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="static/css/index.css">
     <title>HirePath</title>
 </head>
@@ -104,7 +104,7 @@ if (!$result) {
     <nav>
     <p class="logo">
         <a href="index.php">
-            <img src="img/icon/logo.png" alt="Hire Path Logo">
+            <img src="static/img/icon/logo.png" alt="Hire Path Logo">
         </a>
     </p>
         <ul class="nav_links" id="nav_links" aria-label="Main navigation">
@@ -159,7 +159,7 @@ if (!$result) {
                     <form onsubmit="applyFilters();return false;">
                         <label for="filter_category">Category</label>
                         <select id="filter_category" name="category">
-                            <option value="">All Categories</option>
+                            <option value="" disabled selected <?php echo $categoryFilter === '' ? 'selected' : ''; ?>></option>
                             <option value="IT" <?php echo $categoryFilter === 'IT' ? 'selected' : ''; ?>>IT & Software</option>
                             <option value="Finance" <?php echo $categoryFilter === 'Finance' ? 'selected' : ''; ?>>Finance</option>
                             <option value="Healthcare" <?php echo $categoryFilter === 'Healthcare' ? 'selected' : ''; ?>>Healthcare</option>
@@ -179,18 +179,16 @@ if (!$result) {
 
                         <label for="filter_salary">Salary</label>
                         <select id="filter_salary" name="salary">
-                            <option value="">All Salaries</option>
+                            <option value=""disabled selected></option>
                             <option value="0-20000" <?php echo $salaryFilter === '0-20000' ? 'selected' : ''; ?>>₱0 - ₱20,000</option>
                             <option value="20001-50000" <?php echo $salaryFilter === '20001-50000' ? 'selected' : ''; ?>>₱20,001 - ₱50,000</option>
                             <option value="50001-100000" <?php echo $salaryFilter === '50001-100000' ? 'selected' : ''; ?>>₱50,001 - ₱100,000</option>
                             <option value="100001-150000" <?php echo $salaryFilter === '100001-150000' ? 'selected' : ''; ?>>₱100,001 - ₱150,000</option>
                             <option value="150001-200000" <?php echo $salaryFilter === '150001-200000' ? 'selected' : ''; ?>>₱150,001 - ₱200,000</option>
-                            <option value="200001+" <?php echo $salaryFilter === '200001+' ? 'selected' : ''; ?>>₱200,001 and above</option>
                         </select>
 
                         <label for="region_select">Region</label>
                         <select id="region_select" onchange="populateCities()">
-                            <option value="">Select a Region</option>
                             <option value="NCR">National Capital Region (NCR)</option>
                             <option value="CAR">Cordillera Administrative Region (CAR)</option>
                             <option value="Region I">Region I - Ilocos Region</option>
@@ -212,7 +210,6 @@ if (!$result) {
 
                         <label for="city_select">City</label>
                         <select id="city_select" style="display: flex;">
-                            <option value="">Select City</option>
                         </select>
 
                         <div class="button_container">
@@ -281,19 +278,19 @@ if (!$result) {
                 
                 <div class="job_info">
                     <p>
-                        <strong><img src="img/icon/salary.png" alt="Salary Icon" style="width: 16px; height: 16px;"> Salary:</strong> 
+                        <strong><img src="static/img/icon/salary.png" alt="Salary Icon" style="width: 16px; height: 16px;"> Salary:</strong> 
                         <span id="job_salary">N/A</span>
                     </p>
                 </div>
                 <div class="job_info">
                     <p>
-                        <strong><img src="img/icon/skill.png" alt="Skills Icon" style="width: 16px; height: 16px;"> Skills:</strong>
+                        <strong><img src="static/img/icon/skill.png" alt="Skills Icon" style="width: 16px; height: 16px;"> Skills:</strong>
                         <span id="job_skills">N/A</span>
                     </p>
                 </div>
                 <div class="job_info">  
                     <p>
-                        <strong><img src="img/icon/education.png" alt="Education Icon" style="width: 16px; height: 16px;"> Education:</strong> 
+                        <strong><img src="static/img/icon/education.png" alt="Education Icon" style="width: 16px; height: 16px;"> Education:</strong> 
                         <span id="job_education">N/A</span>
                     </p>
                 </div>

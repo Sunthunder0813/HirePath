@@ -200,8 +200,8 @@ function populateCities() {
     const regionSelect = document.getElementById('region_select');
     const citySelect = document.getElementById('city_select');
     const selectedRegion = regionSelect.value;
-
-    citySelect.innerHTML = '<option value="">Select City</option>';
+    
+    citySelect.innerHTML = ''; // Remove placeholder
 
     if (selectedRegion && regions[selectedRegion]) {
         regions[selectedRegion].forEach(city => {

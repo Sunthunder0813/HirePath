@@ -86,7 +86,7 @@ CloseConnection($conn);
         </a>
     </p>
     <ul class="nav_links">
-        <li><a href="employee_sign_in.php">Post a Job</a></li>
+        <li><a href="../employer/employee_sign_in.php">Post a Job</a></li>
         <?php if (!empty($username)): ?>
             <li><a href="application.php">Application</a></li>
         <?php endif; ?>
@@ -95,7 +95,7 @@ CloseConnection($conn);
                 <a><?php echo htmlspecialchars($email); ?> <span style="font-size: 1em;">&#9660;</span></a>
                 <ul class="dropdown_menu">
                     <li><a href="jobseeker_changepass.php" class="sign-out-button">Change Password</a></li>
-                    <li><a href="logout.php" class="sign_out_button">Sign Out</a></li>
+                    <li><a href="../../logout.php" class="sign_out_button">Sign Out</a></li>
                 </ul>
             </li>
         <?php else: ?>

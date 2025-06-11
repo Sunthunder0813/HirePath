@@ -80,7 +80,7 @@ function getStatusIcon($status, $directory = '../../static/img/icon') {
         </a>
     </p>
     <ul class="nav_links">
-        <li><a href="employee_sign_in.php">Post a Job</a></li>
+        <li><a href="../employer/employee_sign_in.php">Post a Job</a></li>
         <?php if (!empty($username)): ?>
             <li><a href="application.php">Application</a></li>
         <?php endif; ?>
@@ -142,14 +142,11 @@ function getStatusIcon($status, $directory = '../../static/img/icon') {
             <?php else: ?>
                 <p class="no_applications">
                     No applications found. 
-                    <a href="../../index.php">Browse Jobs</a>
+                    <a href="../../index.php">Browse Jobs</a>   
                 </p>
             <?php endif; ?>
         </div>
     </div>
-    <script>
-        
-        
-    </script>
+    <script src="../../static/js/application.js"></script>
 </body>
 </html>
