@@ -1171,10 +1171,6 @@ while ($row = $job_result->fetch_assoc()) {
             max-width: 100vw;
             overflow-x: hidden;
         }
-
-        .required-highlight {
-            /* Remove highlight style */
-        }
         .required-exclaim {
             display: none !important;
         }

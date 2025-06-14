@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Generate a unique file name and save the file
-        $upload_dir = 'resumes/';
+        $upload_dir = '../../job_seeker/resumes/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true); // Create the directory if it doesn't exist
         }

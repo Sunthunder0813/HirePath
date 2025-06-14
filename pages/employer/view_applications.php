@@ -84,12 +84,15 @@ foreach ($applications as $application) {
         }
         .application-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
             gap: 15px;
             padding: 0;
             list-style: none;
+            justify-items: center; /* Center cards in their columns */
         }
         .application-card {
+            width: 100%; /* Make cards fill their grid cell */
+            max-width: 340px; /* Prevent cards from stretching too wide */
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
