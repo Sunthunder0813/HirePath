@@ -1,13 +1,17 @@
 function updateNavbarCount() {
-    fetch('get_pending_count.php')
+    // Update the fetch path to point to the correct PHP endpoint
+    fetch('../../pages/employer/get_pending_count.php')
         .then(response => response.json())
         .then(data => {
+            console.log('Pending count response:', data); // Debug log
             const navbarBadge = document.getElementById('navbar-badge');
-            navbarBadge.textContent = data.count;
-            navbarBadge.style.display = data.count > 0 ? 'inline-block' : 'none';
+            if (navbarBadge) {
+                navbarBadge.textContent = data.count;
+                navbarBadge.style.display = data.count > 0 ? 'inline-block' : 'none';
+            }
         })
         .catch(error => console.error('Error fetching navbar count:', error));
 }
 
 updateNavbarCount();
-setInterval(updateNavbarCount, 5000); 
+setInterval(updateNavbarCount, 5000);

@@ -1202,6 +1202,23 @@ while ($row = $job_result->fetch_assoc()) {
         .edit-shortcut-indicator.visible {
             opacity: 0.95;
         }
+
+        .applications-container {
+            position: relative; /* Ensure the badge is positioned relative to the parent container */
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px; /* Moves it slightly above the tab */
+            right: -5px; /* Moves it slightly outside */
+            background: #dc3545;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
     </style>
     
 </head>

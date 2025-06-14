@@ -145,7 +145,7 @@ $company_name = $userDetails['company_name'];
     display: inline-block;
 }
     </style>
-    <script src="js/get_pending_count.js" defer></script>
+    <script src="../../static/js/get_pending_count.js" defer></script>
 </head>
 <body>
 
@@ -161,7 +161,7 @@ $company_name = $userDetails['company_name'];
                 </div>
             </li>
             <li><a href="company_profile.php">Company Profile</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="../../logout.php">Logout</a></li>
         </ul>
     </nav>
 

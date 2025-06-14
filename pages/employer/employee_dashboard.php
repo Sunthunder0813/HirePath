@@ -392,7 +392,7 @@ h1 {
             <li>
                 <div class="applications-container">
                     <a href="view_applications.php">Applications</a>
-                    <span id="navbar-badge" class="nav-badge" style="display: none;">0</span>
+                    <span id="navbar-badge" class="nav-badge" style="display: inline-block;">0</span>
                 </div>
             </li>
             <li><a href="company_profile.php">Company Profile</a></li>

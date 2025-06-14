@@ -245,7 +245,7 @@ color: #007BFF;
         </a>
     </p>
     <ul class="nav-links">
-        <li><a href="employee_sign_in.php">Post a Job</a></li>
+        <li><a href="../employer/employee_sign_in.php">Post a Job</a></li>
         <?php if (!empty($username)): ?>
             <li><a href="application.php">Application</a></li>
         <?php endif; ?>
