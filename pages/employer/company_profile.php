@@ -41,6 +41,8 @@ while ($row = $job_result->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Profile</title>
     <link rel="stylesheet" href="../../static/css/company_profile.css">
+    <link rel="shortcut icon" href="../../static/img/icon/favicon.png" type="image/x-icon">
+    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -1169,6 +1171,37 @@ while ($row = $job_result->fetch_assoc()) {
             max-width: 100vw;
             overflow-x: hidden;
         }
+
+        .required-highlight {
+            /* Remove highlight style */
+        }
+        .required-exclaim {
+            display: none !important;
+        }
+        .required-label {
+            display: none !important;
+        }
+        .edit-shortcut-indicator {
+            display: block;
+            position: absolute;
+            top: 52px;
+            right: 18px;
+            background: #fffbe7;
+            color: #0A2647;
+            font-size: 0.98em;
+            font-weight: 500;
+            border-radius: 12px;
+            padding: 6px 16px;
+            box-shadow: 0 2px 8px rgba(38,208,206,0.10);
+            z-index: 4100;
+            border: 1.5px solid #ffcc00;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            transition: opacity 0.7s;
+        }
+        .edit-shortcut-indicator.visible {
+            opacity: 0.95;
+        }
     </style>
     
 </head>
@@ -1208,6 +1241,9 @@ while ($row = $job_result->fetch_assoc()) {
                 </button>
                 <div id="editModeIndicator" class="edit-mode-indicator">
                     Edit Mode
+                </div>
+                <div id="editShortcutIndicator" class="edit-shortcut-indicator">
+                    Press <b>Ctrl+Alt+E</b> to edit, <b>Ctrl+Alt+S</b> to save
                 </div>
                 <div class="company-label">
                     <div style="position:relative;display:inline-block;">
@@ -1312,10 +1348,58 @@ while ($row = $job_result->fetch_assoc()) {
 <button id="profileNextBtn" class="profile-flip-btn"></button>
 <script src="../../static/js/get_pending_count.js" defer></script>
 <script>
+// Show shortcut indicator for edit on page load with fade in/out every 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    var shortcutDiv = document.getElementById('editShortcutIndicator');
+    if (shortcutDiv) {
+        shortcutDiv.innerHTML = 'Press <b>Ctrl+Alt+E</b> to edit, <b>Ctrl+Alt+S</b> to save';
+        shortcutDiv.classList.remove('visible');
+        let fadeInterval = setInterval(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000); // visible for 2 seconds
+        }, 5000);
+        // Show immediately on load
+        setTimeout(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000);
+        }, 200);
+        // Optionally, clear interval on navigation away
+        window.addEventListener('beforeunload', function() {
+            clearInterval(fadeInterval);
+        });
+    }
+});
+
 function enableEditMode(e) {
     document.getElementById('editModeIndicator').style.display = 'block';
     var editModeIndicatorBack = document.getElementById('editModeIndicatorBack');
     if (editModeIndicatorBack) editModeIndicatorBack.style.display = 'block';
+
+    // Show shortcut indicator and update text for save
+    var shortcutDiv = document.getElementById('editShortcutIndicator');
+    if (shortcutDiv) {
+        shortcutDiv.innerHTML = 'Press <b>Ctrl+Alt+S</b> to save changes';
+        shortcutDiv.classList.remove('visible');
+        let fadeInterval = setInterval(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000);
+        }, 5000);
+        setTimeout(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000);
+        }, 200);
+        window.addEventListener('beforeunload', function() {
+            clearInterval(fadeInterval);
+        });
+    }
 
     var container = document.getElementById('profileContainer');
     if (container.classList.contains('blur-overlay')) {
@@ -1360,14 +1444,19 @@ function enableEditMode(e) {
     };
     document.getElementById('companyCover').classList.add('img-edit-hover');
 
+    var nameInput = document.getElementById('companyNameInput');
+    var taglineInput = document.getElementById('companyTaglineInput');
+    var descInput = document.getElementById('companyDescriptionInput');
+
     document.getElementById('companyNameLabel').style.display = 'none';
-    document.getElementById('companyNameInput').style.display = 'block';
-    document.getElementById('companyNameInput').oninput = function(e) {
+    nameInput.style.display = 'block';
+    nameInput.oninput = function(e) {
         document.getElementById('companyNameLabel').textContent = e.target.value;
+        updateAcronymLabelRealtime();
+        updateDescLeftRealtime();
     };
 
     var taglineLabel = document.getElementById('companyTaglineLabel');
-    var taglineInput = document.getElementById('companyTaglineInput');
     if (taglineLabel && taglineInput) {
         taglineLabel.style.display = 'none';
         taglineInput.style.display = 'block';
@@ -1378,7 +1467,6 @@ function enableEditMode(e) {
     }
 
     var descDisplay = document.getElementById('companyDescriptionDisplay');
-    var descInput = document.getElementById('companyDescriptionInput');
     if (descDisplay && descInput) {
         descDisplay.style.display = 'none';
         descInput.style.display = 'block';
@@ -1388,6 +1476,32 @@ function enableEditMode(e) {
         };
     }
 }
+
+// Show shortcut indicator for edit on page load
+document.addEventListener('DOMContentLoaded', function() {
+    var shortcutDiv = document.getElementById('editShortcutIndicator');
+    if (shortcutDiv) {
+        shortcutDiv.innerHTML = 'Press <b>Ctrl+Alt+E</b> to edit, <b>Ctrl+Alt+S</b> to save';
+        shortcutDiv.classList.remove('visible');
+        let fadeInterval = setInterval(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000); // visible for 2 seconds
+        }, 2000);
+        // Show immediately on load
+        setTimeout(function() {
+            shortcutDiv.classList.add('visible');
+            setTimeout(function() {
+                shortcutDiv.classList.remove('visible');
+            }, 2000);
+        }, 200);
+        // Optionally, clear interval on navigation away
+        window.addEventListener('beforeunload', function() {
+            clearInterval(fadeInterval);
+        });
+    }
+});
 
 function saveProfileChanges() {
     var formData = new FormData();
