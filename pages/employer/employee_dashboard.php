@@ -334,6 +334,35 @@ h1 {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        @media (max-width: 900px) {
+            .dashboard-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+            }
+            .dashboard-card {
+                width: 90%;
+                max-width: 400px;
+            }
+        }
+        @media (max-width: 600px) {
+            .dashboard-links {
+                gap: 16px;
+                margin: 18px 0;
+            }
+            .dashboard-card {
+                width: 98%;
+                max-width: 98vw;
+                padding: 14px 6px;
+            }
+            .dashboard-card h2 {
+                font-size: 1.1em;
+            }
+            .dashboard-card p {
+                font-size: 0.95em;
+            }
+        }
+
         .disabled-link {
             pointer-events: none;
             background: #ccc !important;
@@ -351,9 +380,6 @@ h1 {
             text-align: center;
             font-weight: bold;
         }   
-
-
-
     </style>
     
 </head>

@@ -121,7 +121,7 @@ if (!$result) {
                 </ul>
             </li>
             <?php else: ?>
-                <li><a href="pages/job_seeker/sign_in.php" target="_blank">Sign In</a></li>
+                <li><a href="pages/job_seeker/sign_in.php">Sign In</a></li>
             <?php endif; ?>
         </ul>
     </nav>
