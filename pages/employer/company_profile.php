@@ -953,6 +953,222 @@ while ($row = $job_result->fetch_assoc()) {
         .edit-mode-active .company-desc-acronym {
             color: #fff !important;
         }
+        
+        @media (max-width: 900px) {
+            .profile-flip-wrapper,
+            .profile-flip-inner,
+            .profile-front,
+            .profile-back {
+                max-width: 100vw !important;
+                width: 100vw !important;
+                min-width: 0 !important;
+            }
+            .profile-front,
+            .profile-back {
+                height: auto !important;
+                min-height: 0 !important;
+                margin: 8px 0 !important;
+                border-radius: 8px !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .company-description-section {
+                flex-direction: column !important;
+                height: auto !important;
+            }
+            .company-desc-left {
+                border-radius: 8px 8px 0 0 !important;
+                min-width: 0 !important;
+                max-width: 100vw !important;
+                width: 100vw !important;
+                padding: 10px 0 4px 0 !important;
+            }
+            .company-desc-right {
+                padding: 0 !important;
+                min-width: 0 !important;
+                max-width: 100vw !important;
+                width: 100vw !important;
+            }
+            .company-desc-logo img {
+                width: 48px !important;
+                height: 48px !important;
+            }
+            .company-desc-title {
+                font-size: 0.9em !important;
+                max-width: 95vw !important;
+            }
+            .overview-top {
+                padding: 8px 2vw 0 2vw !important;
+            }
+            .overview-label-horizontal {
+                font-size: 1em !important;
+            }
+            .overview-content {
+                font-size: 0.95em !important;
+                max-width: 98vw !important;
+            }
+            .company-image-wrapper {
+                position: static !important;
+                width: 100vw !important;
+                height: 120px !important;
+                border-radius: 0 !important;
+                margin: 0 auto 8px auto !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+            .company-image-wrapper img {
+                width: 100vw !important;
+                height: 120px !important;
+                border-radius: 0 !important;
+                object-fit: cover !important;
+            }
+            .header-content {
+                padding: 8px 2vw 8px 2vw !important;
+            }
+            .company-profile-title-border {
+                width: 100vw !important;
+                min-height: 40px !important;
+                padding-left: 0 !important;
+                left: 0 !important;
+                border-radius: 0 0 8px 8px !important;
+                margin: 0 0 8px 0 !important;
+            }
+            .company-profile-title {
+                max-width: 95vw !important;
+            }
+            .company-main-title {
+                font-size: 1em !important;
+                letter-spacing: 1px !important;
+            }
+            .company-tagline-large {
+                font-size: 0.9em !important;
+                padding: 4px 4px !important;
+                max-width: 95vw !important;
+            }
+            .edit-profile-btn {
+                top: 4px !important;
+                right: 4px !important;
+                width: 24px !important;
+                height: 24px !important;
+                background-size: 14px 14px !important;
+            }
+            .edit-mode-input,
+            .edit-mode-tagline,
+            .edit-mode-wide {
+                max-width: 95vw !important;
+                width: 95vw !important;
+                font-size: 1em !important;
+                padding: 8px 8px !important;
+            }
+            .edit-mode-textarea {
+                max-width: 95vw !important;
+                font-size: 0.95em !important;
+                padding: 8px !important;
+                min-height: 60px !important;
+                height: 80px !important;
+            }
+            .jobs-section {
+                padding: 8px 2vw 4px 2vw !important;
+                max-width: 98vw !important;
+            }
+            .job-list li {
+                padding: 8px 4px !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .company-desc-logo img {
+                width: 36px !important;
+                height: 36px !important;
+            }
+            .company-desc-title {
+                font-size: 0.8em !important;
+            }
+            .overview-label-horizontal {
+                font-size: 0.8em !important;
+            }
+            .overview-content {
+                font-size: 0.8em !important;
+            }
+            .company-image-wrapper {
+                height: 60px !important;
+            }
+            .company-image-wrapper img {
+                height: 60px !important;
+            }
+            .edit-profile-btn {
+                width: 18px !important;
+                height: 18px !important;
+                background-size: 10px 10px !important;
+            }
+            .company-profile-title {
+                max-width: 90vw !important;
+            }
+            .company-main-title {
+                font-size: 0.8em !important;
+            }
+            .company-tagline-large {
+                font-size: 0.7em !important;
+                padding: 2px 4px !important;
+                max-width: 90vw !important;
+            }
+            .edit-mode-input,
+            .edit-mode-tagline,
+            .edit-mode-wide {
+                max-width: 90vw !important;
+                width: 90vw !important;
+            }
+            .edit-mode-textarea {
+                max-width: 90vw !important;
+            }
+            .jobs-section {
+                padding: 4px 1vw 2px 1vw !important;
+            }
+        }
+        @media (max-width: 400px) {
+            .company-main-title,
+            .company-profile-title,
+            .company-tagline-large {
+                font-size: 0.7em !important;
+                max-width: 98vw !important;
+            }
+            .company-desc-title {
+                font-size: 0.7em !important;
+            }
+        }
+        /* Hide flip buttons on very small screens */
+        @media (max-width: 600px) {
+            #profilePrevBtn, #profileNextBtn {
+                display: none !important;
+            }
+        }
+        /* Make nav bar and footer compact on mobile */
+        @media (max-width: 600px) {
+            nav.navbar {
+                flex-direction: column;
+                padding: 4px 0 !important;
+            }
+            nav.navbar .logo {
+                font-size: 1em !important;
+                padding: 2px 0 !important;
+            }
+            nav.navbar .nav-links {
+                flex-direction: column;
+                gap: 2px !important;
+            }
+            nav.navbar .nav-links li {
+                margin: 0 !important;
+            }
+            footer.footer {
+                font-size: 0.8em !important;
+                padding: 4px 0 !important;
+            }
+        }
+        /* Ensure horizontal scrolling never appears */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
     </style>
     
 </head>
