@@ -316,7 +316,7 @@ function checkLoginAndApply() {
         if (!jobId || jobId === "null" || jobId === "") {
             alert("Please select a job before applying.");
         } else {
-            window.location.href = 'upload_resume.php?job_id=' + encodeURIComponent(jobId);
+            window.location.href = 'pages/job_seeker/upload_resume.php?job_id=' + encodeURIComponent(jobId);
         }
     <?php endif; ?>
 }
