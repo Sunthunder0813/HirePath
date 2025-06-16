@@ -672,7 +672,25 @@ foreach ($jobs as $job) {
                         document.getElementById('modal-edit-job-id').value = jobData.job_id || '';
                         document.getElementById('modal-edit-title').value = jobData.title || '';
                         document.getElementById('modal-edit-description').value = jobData.description || '';
-                        document.getElementById('modal-edit-category').value = jobData.category || '';
+                        // --- Category logic start ---
+                        const categorySelect = document.getElementById('modal-edit-category');
+                        const otherCategoryInput = document.getElementById('modal-edit-other-category');
+                        let found = false;
+                        for (let i = 0; i < categorySelect.options.length; i++) {
+                            if (categorySelect.options[i].value.trim().toLowerCase() === String(jobData.category || '').trim().toLowerCase()) {
+                                categorySelect.value = categorySelect.options[i].value;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found && jobData.category) {
+                            categorySelect.value = "Others";
+                            otherCategoryInput.value = jobData.category;
+                        } else {
+                            otherCategoryInput.value = "";
+                        }
+                        toggleOtherCategoryEdit();
+                        // --- Category logic end ---
                         document.getElementById('modal-edit-salary').value = jobData.salary || '';
                         // Set region/city if available
                         if (jobData.location) {
@@ -702,6 +720,8 @@ foreach ($jobs as $job) {
                         document.getElementById('modal-edit-title').value = card.querySelector('.job-title').textContent.trim();
                         document.getElementById('modal-edit-description').value = '';
                         document.getElementById('modal-edit-category').value = '';
+                        document.getElementById('modal-edit-other-category').value = '';
+                        toggleOtherCategoryEdit();
                         document.getElementById('modal-edit-salary').value = '';
                         document.getElementById('modal-edit-region').value = '';
                         updateCitiesEdit();

@@ -42,14 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $job_id) {
     header("Location: view_jobs.php?updated=1");
     exit();
 }
-// No output or action if not POST
-?>
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-    header("Location: view_jobs.php?updated=1");
-    exit();
-}
 
 // Fetch job details
 $stmt = $conn->prepare("SELECT * FROM jobs WHERE job_id=? AND employer_id=?");
@@ -121,12 +113,16 @@ if (!$job) {
             color: #888;
             text-decoration: underline;
         }
+        .salary-error {
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="edit-job-container">
         <h2>Edit Job</h2>
-        <form method="post">
+        <form method="post" onsubmit="return validateSalaryEdit();">
             <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($job['job_id']); ?>">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($job['title']); ?>" required>
@@ -137,8 +133,11 @@ if (!$job) {
             <label for="category">Category</label>
             <input type="text" name="category" id="category" value="<?php echo htmlspecialchars($job['category']); ?>">
 
-            <label for="salary">Salary</label>
-            <input type="number" name="salary" id="salary" value="<?php echo htmlspecialchars($job['salary']); ?>" min="0" max="10000000" required>
+            <label for="salary_display">Salary</label>
+            <input type="text" id="salary_display" placeholder="₱0.00" autocomplete="off" required
+                oninput="formatSalaryEditInput()" onfocus="salaryEditFocus(true)" onblur="salaryEditFocus(false)">
+            <input type="number" name="salary" id="salary" value="<?php echo htmlspecialchars($job['salary']); ?>" min="0" max="100000000" step="0.01" style="display:none;" required>
+            <span id="salary_edit_error" class="salary-error">Please enter a valid Salary between 0 and 100,000,000.</span>
 
             <label for="location">Location</label>
             <input type="text" name="location" id="location" value="<?php echo htmlspecialchars($job['location']); ?>">
@@ -156,5 +155,96 @@ if (!$job) {
         </form>
         <a href="view_jobs.php" class="cancel-link">Cancel</a>
     </div>
+    <script>
+    function formatSalaryEditInput(isBlur) {
+        var displayInput = document.getElementById("salary_display");
+        var hiddenInput = document.getElementById("salary");
+        let value = displayInput.value.replace(/[^0-9.]/g, '');
+
+        // Allow only one decimal point
+        let parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+            parts = value.split('.');
+        }
+
+        // Limit to two decimal places if decimal exists
+        if (parts.length === 2) {
+            parts[1] = parts[1].slice(0,2);
+            value = parts[0] + '.' + parts[1];
+        }
+
+        if (isBlur) {
+            let num = value ? Math.min(parseFloat(value), 100000000) : '';
+            if (num !== '' && !isNaN(num)) {
+                let formatted = Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                displayInput.value = '₱' + formatted;
+                hiddenInput.value = num;
+            } else {
+                displayInput.value = '';
+                hiddenInput.value = '';
+            }
+        } else {
+            displayInput.value = value ? '₱' + value : '';
+            hiddenInput.value = value && !isNaN(value) ? Math.min(parseFloat(value), 100000000) : '';
+        }
+        validateSalaryEdit();
+    }
+
+    function salaryEditFocus(isFocused) {
+        var displayInput = document.getElementById("salary_display");
+        var salaryInput = document.getElementById("salary");
+        var salaryError = document.getElementById("salary_edit_error");
+        if (!isFocused) {
+            salaryError.style.display = "none";
+            formatSalaryEditInput(true);
+        } else {
+            formatSalaryEditInput(false);
+            if (!salaryInput.checkValidity()) {
+                salaryError.style.display = "inline";
+            }
+        }
+    }
+
+    function validateSalaryEdit() {
+        var salaryInput = document.getElementById("salary");
+        var salaryError = document.getElementById("salary_edit_error");
+        var value = parseFloat(salaryInput.value);
+
+        if (salaryInput === document.activeElement && (isNaN(value) || value < 0 || value > 100000000)) {
+            salaryError.style.display = "inline";
+            salaryInput.setCustomValidity("Salary must be a positive number not exceeding 100,000,000.");
+            return false;
+        } else {
+            salaryError.style.display = "none";
+            salaryInput.setCustomValidity("");
+            return true;
+        }
+    }
+
+    function validateSalaryEditOnSubmit() {
+        formatSalaryEditInput(true);
+        return validateSalaryEdit();
+    }
+
+    // Initialize salary display on page load
+    window.addEventListener('DOMContentLoaded', function() {
+        var salary = document.getElementById('salary').value;
+        var displayInput = document.getElementById('salary_display');
+        if (salary !== '' && !isNaN(salary)) {
+            let num = Math.min(parseFloat(salary), 100000000);
+            displayInput.value = '₱' + Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        } else {
+            displayInput.value = '';
+        }
+    });
+
+    // Attach validation to form submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+        if (!validateSalaryEditOnSubmit()) {
+            e.preventDefault();
+        }
+    });
+    </script>
 </body>
 </html>

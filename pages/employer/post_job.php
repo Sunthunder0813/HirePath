@@ -324,11 +324,12 @@ function formatSalaryInput(isBlur) {
         value = parts[0] + '.' + parts[1];
     }
 
-    // Only format on blur, otherwise let user type freely
     if (isBlur) {
         let num = value ? Math.min(parseFloat(value), 100000000) : '';
         if (num !== '' && !isNaN(num)) {
-            displayInput.value = '₱' + Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            // Always show .00 if no decimals
+            let formatted = Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            displayInput.value = '₱' + formatted;
             hiddenInput.value = num;
         } else {
             displayInput.value = '';
@@ -348,7 +349,7 @@ function salaryFocus(isFocused) {
     var salaryError = document.getElementById("salary_error");
     if (!isFocused) {
         salaryError.style.display = "none";
-        // Format with .00 when not focused
+        // Format with .00 and ₱ when not focused
         formatSalaryInput(true);
     } else {
         // Remove formatting, allow user to type freely
@@ -491,7 +492,7 @@ function updateCities() {
 // Ensure job_location is set on page load if region/city are pre-selected
 window.addEventListener('DOMContentLoaded', function() {
     updateCities();
-    // Initialize salary display with .00 if not focused
+    // Initialize salary display with .00 and ₱ if not focused
     formatSalaryInput(true);
     updateFinalCategory();
 });
