@@ -898,6 +898,121 @@ foreach ($jobs as $job) {
                 locationInput.value = selectedRegion + (selectedCity ? `, ${selectedCity}` : "");
             });
         }
+
+        // --- Modal Salary Formatting/Validation (Peso, .00) ---
+        function formatSalaryModalInput(isBlur) {
+            var displayInput = document.getElementById("modal-edit-salary-display");
+            var hiddenInput = document.getElementById("modal-edit-salary");
+            let value = displayInput.value.replace(/[^0-9.]/g, '');
+
+            // Allow only one decimal point
+            let parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+                parts = value.split('.');
+            }
+
+            // Limit to two decimal places if decimal exists
+            if (parts.length === 2) {
+                parts[1] = parts[1].slice(0,2);
+                value = parts[0] + '.' + parts[1];
+            }
+
+            if (isBlur) {
+                let num = value ? Math.min(parseFloat(value), 100000000) : '';
+                if (num !== '' && !isNaN(num)) {
+                    let formatted = Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    displayInput.value = '₱' + formatted;
+                    hiddenInput.value = num;
+                } else {
+                    displayInput.value = '';
+                    hiddenInput.value = '';
+                }
+            } else {
+                displayInput.value = value ? '₱' + value : '';
+                hiddenInput.value = value && !isNaN(value) ? Math.min(parseFloat(value), 100000000) : '';
+            }
+            validateSalaryModal();
+        }
+
+        function salaryModalFocus(isFocused) {
+            var displayInput = document.getElementById("modal-edit-salary-display");
+            var salaryInput = document.getElementById("modal-edit-salary");
+            var salaryError = document.getElementById("modal-edit-salary-error");
+            if (!isFocused) {
+                salaryError.style.display = "none";
+                formatSalaryModalInput(true);
+            } else {
+                formatSalaryModalInput(false);
+                if (!salaryInput.checkValidity()) {
+                    salaryError.style.display = "inline";
+                }
+            }
+        }
+
+        function validateSalaryModal() {
+            var salaryInput = document.getElementById("modal-edit-salary");
+            var salaryError = document.getElementById("modal-edit-salary-error");
+            var value = parseFloat(salaryInput.value);
+
+            if (salaryInput === document.activeElement && (isNaN(value) || value < 0 || value > 100000000)) {
+                salaryError.style.display = "inline";
+                salaryInput.setCustomValidity("Salary must be a positive number not exceeding 100,000,000.");
+            } else {
+                salaryError.style.display = "none";
+                salaryInput.setCustomValidity("");
+            }
+        }
+
+        // On modal open, initialize salary display
+        function setModalSalaryDisplay(salary) {
+            var displayInput = document.getElementById('modal-edit-salary-display');
+            var hiddenInput = document.getElementById('modal-edit-salary');
+            if (salary !== '' && !isNaN(salary)) {
+                let num = Math.min(parseFloat(salary), 100000000);
+                displayInput.value = '₱' + Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                hiddenInput.value = num;
+            } else {
+                displayInput.value = '';
+                hiddenInput.value = '';
+            }
+        }
+
+        // Patch into modal population logic
+        document.addEventListener('DOMContentLoaded', () => {
+            // ...existing code...
+            document.querySelectorAll('.application-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // ...existing code...
+                    if (jobData) {
+                        // ...existing code...
+                        setModalSalaryDisplay(jobData.salary || '');
+                        // ...existing code...
+                    } else {
+                        // ...existing code...
+                        setModalSalaryDisplay('');
+                        // ...existing code...
+                    }
+                    // ...existing code...
+                });
+            });
+            // ...existing code...
+            // On modal form submit, ensure salary is formatted and valid
+            document.getElementById('modal-edit-form').addEventListener('submit', function(e) {
+                formatSalaryModalInput(true);
+                var salaryInput = document.getElementById("modal-edit-salary");
+                var value = parseFloat(salaryInput.value);
+                if (isNaN(value) || value < 0 || value > 100000000) {
+                    e.preventDefault();
+                    document.getElementById("modal-edit-salary-error").style.display = "inline";
+                }
+            });
+        });
+
+        // On modal open (in case of manual open), also format salary
+        window.addEventListener('DOMContentLoaded', function() {
+            setModalSalaryDisplay(document.getElementById('modal-edit-salary').value);
+        });
     </script>
     <?php
     // Output all jobs as a JS array for modal population
@@ -1069,8 +1184,11 @@ foreach ($jobs as $job) {
                                 <input type="text" id="modal-edit-other-category" name="other_category" placeholder="Enter category" style="display:none;margin-top:8px;" required>
                             </div>
                             <div class="form-group">
-                                <label for="modal-edit-salary">Salary</label>
-                                <input type="number" name="salary" id="modal-edit-salary" min="0" step="1" required>
+                                <label for="modal-edit-salary-display">Salary</label>
+                                <input type="text" id="modal-edit-salary-display" placeholder="₱0.00" autocomplete="off" required
+                                    oninput="formatSalaryModalInput()" onfocus="salaryModalFocus(true)" onblur="salaryModalFocus(false)">
+                                <input type="number" name="salary" id="modal-edit-salary" min="0" max="100000000" step="0.01" style="display:none;" required>
+                                <span id="modal-edit-salary-error" style="color: red; display: none;">Please enter a valid Salary between 0 and 100,000,000.</span>
                             </div>
                             <div class="form-group">
                                 <label for="modal-edit-region">Region</label>
