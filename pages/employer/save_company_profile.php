@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $current_cover = $currentData['company_cover'];
 
     if (isset($_FILES['company_image']) && $_FILES['company_image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'static/img/company_img/';
+        $upload_dir = '../../static/img/company_img/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true); 
         }
         $company_image = $upload_dir . basename($_FILES['company_image']['name']);
         
-        if ($current_image && $current_image !== 'static/img/company_img/default.jpg' && file_exists($current_image)) {
+        if ($current_image && $current_image !== '../../static/img/company_img/default.jpg' && file_exists($current_image)) {
             unlink($current_image);
         }
 
@@ -51,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_FILES['company_cover']) && $_FILES['company_cover']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = 'static/img/company_cover/';
+        $upload_dir = '../../static/img/company_cover/';
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true); 
         }
         $company_cover = $upload_dir . basename($_FILES['company_cover']['name']);
         
-        if ($current_cover && $current_cover !== 'static/img/company_cover/default.jpg' && file_exists($current_cover)) {
+        if ($current_cover && $current_cover !== '../../static/img/company_cover/default.jpg' && file_exists($current_cover)) {
             unlink($current_cover);
         }
 
@@ -75,10 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $sql = "UPDATE `users` 
             SET `company_name` = ?, 
-                `company_tagline` = ?, 
-                `company_image` = ?, 
-                `company_description` = ?, 
-                `company_cover` = ? 
+                `company_tagline` = ?,
+                `company_image` = ?,
+                `company_description` = ?,
+                `company_cover` = ?
             WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssssss", $company_name, $company_tagline, $company_image, $company_description, $company_cover, $username);
