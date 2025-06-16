@@ -420,7 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
         </p>
         <ul class="nav_links">
-            <li><a href="employee_sign_in.php">Post a Job</a></li>
+            <li><a href="pages/employer/employee_sign_in.php">Post a Job</a></li>
             <?php if (!empty($username)): ?>
                 <li><a href="application.php">Application</a></li>
             <?php endif; ?>

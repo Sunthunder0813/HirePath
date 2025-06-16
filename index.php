@@ -88,6 +88,13 @@ $result = $stmt->get_result();
 if (!$result) {
     die("Query failed: " . $conn->error);
 }
+
+// Check for initial login
+$isInitialLogin = false;
+if (isset($_SESSION['initial_login']) && $_SESSION['initial_login'] === true) {
+    $isInitialLogin = true;
+    unset($_SESSION['initial_login']); // Only trigger once
+}
 ?>
 
 <!DOCTYPE html>
@@ -369,6 +376,22 @@ document.addEventListener('DOMContentLoaded', function() {
             autoSelected = true;
         }
     });
+    <?php elseif ($isInitialLogin): ?>
+    document.querySelectorAll('.job_listings .job').forEach(function(jobDiv) {
+        if (jobDiv.getAttribute('data_job_id') == '<?php echo $selectedJobId; ?>') {
+            jobDiv.scrollIntoView({behavior: "smooth", block: "center"});
+            jobDiv.click();
+            autoSelected = true;
+        }
+    });
+    <?php else: ?>
+    // Always select the first job in the list on every page load
+    var firstJob = document.querySelector('.job_listings .job');
+    if (firstJob) {
+        firstJob.scrollIntoView({behavior: "smooth", block: "center"});
+        firstJob.click();
+        autoSelected = true;
+    }
     <?php endif; ?>
 });
 </script>
