@@ -253,6 +253,7 @@ color: #007BFF;
             <li class="profile-dropdown">
                 <a><?php echo htmlspecialchars($email); ?> <span style="font-size: 1em;">&#9660;</span></a> 
                 <ul class="dropdown-menu">
+                    <li><a href="jobseeker_changepass.php" class="sign_out_button">Change Password</a></li>
                     <li><a href="../../logout.php" class="sign-out-button">Sign Out</a></li>
                 </ul>
             </li>
