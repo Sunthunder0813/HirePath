@@ -160,6 +160,7 @@ $company_name = $userDetails['company_name'];
                     <span id="navbar-badge" class="nav-badge" style="display: none;">0</span>
                 </div>
             </li>
+            <li><a href="view_jobs.php">View Jobs</a></li>
             <li><a href="company_profile.php">Company Profile</a></li>
             <li><a href="../../logout.php">Logout</a></li>
         </ul>

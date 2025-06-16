@@ -259,7 +259,7 @@ foreach ($applications as $application) {
     <nav class="navbar">
         <a href="Employee_dashboard.php" class="logo">Employee Portal</a>
         <ul class="nav-links">
-        <li><a href="post_job.php">Post Job</a></li>    
+        <li><a href="post_job.php">Post Job</a></li>  
             <li >
                 <div class="applications-container">
                     <a href="view_applications.php" >Applications</a>
@@ -267,6 +267,7 @@ foreach ($applications as $application) {
                 </div>
             </li>
             
+        <li><a href="view_jobs.php">View Jobs</a></li>  
             <li><a href="company_profile.php">Company Profile</a></li>
             <li><a href="../../logout.php">Logout</a></li>
         </ul>

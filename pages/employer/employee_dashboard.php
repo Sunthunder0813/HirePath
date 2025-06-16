@@ -395,41 +395,417 @@ h1 {
                     <span id="navbar-badge" class="nav-badge" style="display: inline-block;">0</span>
                 </div>
             </li>
+            <li><a href="view_jobs.php">View Jobs</a></li>
             <li><a href="company_profile.php">Company Profile</a></li>
             <li><a href="../../logout.php">Logout</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div class="container" style="overflow-y: auto; max-height: calc(100vh - 110px); scrollbar-width: none; -ms-overflow-style: none;">
+        <style>
+            .container::-webkit-scrollbar {
+                display: none;
+            }
+        </style>
         <?php if (!$has_company): ?>
             <div class="warning-message">
                 You must assign your company profile before posting a job.
             </div>
         <?php endif; ?>
-        <div class="dashboard-links">
-            <div class="dashboard-card">
-                <h2>Post a Job</h2>
-                <p>Create new job postings to attract top talent.</p>
-                <a href="post_job.php"
-                   <?php if (!$has_company) echo 'class="disabled-link" tabindex="-1" aria-disabled="true"'; ?>>
-                   Post Job
-                </a>
+
+        <!-- Data Analytics Section (HTML/CSS Bar Chart) -->
+        <div class="analytics-section" style="max-width:1400px;margin:48px auto 0 auto;background:#fff;padding:40px 32px 32px 32px;border-radius:16px;box-shadow:0 6px 18px rgba(20,66,114,0.10);">
+            <h2 style="text-align:center;color:#144272;margin-bottom:32px;font-size:2em;letter-spacing:1px;">Job Application Analytics</h2>
+            <form method="get" style="text-align:right;max-width:400px;margin:0 0 18px auto;">
+                <?php
+                    // Find all years with applications for this company
+                    $yearStmt = $conn->prepare("
+                        SELECT DISTINCT YEAR(a.applied_at) as year
+                        FROM applications a
+                        JOIN jobs j ON a.job_id = j.job_id
+                        WHERE j.company_name = ?
+                        ORDER BY year DESC
+                    ");
+                    $yearStmt->bind_param("s", $company_name);
+                    $yearStmt->execute();
+                    $yearResult = $yearStmt->get_result();
+                    $years = [];
+                    while ($row = $yearResult->fetch_assoc()) {
+                        if ($row['year']) $years[] = intval($row['year']);
+                    }
+                    $yearStmt->close();
+                    if (empty($years)) $years[] = date('Y');
+                    $selectedYear = isset($_GET['year']) ? $_GET['year'] : $years[0];
+                ?>
+                <label for="year" style="font-weight:600;color:#205295;">Year:</label>
+                <select name="year" id="year" onchange="this.form.submit()" style="padding:4px 10px;border-radius:5px;border:1px solid #b7e4c7;font-size:1em;">
+                    <?php foreach ($years as $y): ?>
+                        <option value="<?php echo $y; ?>" <?php if ($selectedYear == $y) echo 'selected'; ?>><?php echo $y; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+            <?php
+            // Applications per month by status for the selected year
+            $appStats = [];
+            $statuses = ['accepted', 'rejected', 'pending'];
+            foreach ($statuses as $status) {
+                $appStats[$status] = [];
+            }
+
+            $months = [];
+            for ($m = 1; $m <= 12; $m++) {
+                $monthKey = sprintf('%s-%02d', $selectedYear, $m);
+                $months[] = $monthKey;
+            }
+            $stmt = $conn->prepare("
+                SELECT DATE_FORMAT(a.applied_at, '%Y-%m') as month, a.status, COUNT(*) as count
+                FROM applications a
+                JOIN jobs j ON a.job_id = j.job_id
+                WHERE j.company_name = ? AND YEAR(a.applied_at) = ?
+                GROUP BY month, a.status
+                ORDER BY month ASC
+            ");
+            $stmt->bind_param("si", $company_name, $selectedYear);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $month = $row['month'];
+                $status = strtolower($row['status']);
+                $count = $row['count'];
+                if (in_array($status, $statuses)) {
+                    $appStats[$status][$month] = $count;
+                }
+            }
+            $stmt->close();
+
+            $labels = [];
+            $acceptedData = [];
+            $rejectedData = [];
+            $pendingData = [];
+            foreach ($months as $month) {
+                $labels[] = date('M Y', strtotime($month . '-01'));
+                $acceptedData[] = isset($appStats['accepted'][$month]) ? $appStats['accepted'][$month] : 0;
+                $rejectedData[] = isset($appStats['rejected'][$month]) ? $appStats['rejected'][$month] : 0;
+                $pendingData[] = isset($appStats['pending'][$month]) ? $appStats['pending'][$month] : 0;
+            }
+            $maxValue = max(array_merge($acceptedData, $rejectedData, $pendingData, [1])); // avoid division by zero
+            ?>
+            <?php if (array_sum($acceptedData) + array_sum($rejectedData) + array_sum($pendingData) > 0): ?>
+            <style>
+                .bar-chart-modern {
+                    width: 100%;
+                    overflow-x: auto;
+                    padding-bottom: 18px;
+                }
+                .bar-chart-modern-inner {
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: flex-start;
+                    gap: 32px;
+                    min-width: 1100px;
+                    height: 320px;
+                    border-left: 2px solid #144272;
+                    border-bottom: 2px solid #144272;
+                    position: relative;
+                    background: linear-gradient(180deg, #f8f9fa 80%, #e9f5ff 100%);
+                }
+                .bar-group-modern {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 60px;
+                    position: relative;
+                }
+                .bars-stack {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-end;
+                    gap: 8px;
+                    height: 220px;
+                    margin-bottom: 8px;
+                }
+                .bar-modern {
+                    width: 18px;
+                    border-radius: 8px 8px 0 0;
+                    transition: height 0.4s;
+                    box-shadow: 0 4px 16px rgba(20,66,114,0.10);
+                    position: relative;
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: center;
+                }
+                .bar-accepted {
+                    background: linear-gradient(180deg, #205295 0%, #43e97b 100%);
+                    border: 2px solid #144272;
+                }
+                .bar-rejected {
+                    background: linear-gradient(180deg, #dc3545 0%, #ffb3b3 100%);
+                    border: 2px solid #dc3545;
+                }
+                .bar-pending {
+                    background: linear-gradient(180deg, #ffc107 0%, #ffe066 100%);
+                    border: 2px solid #ffc107;
+                }
+                .bar-modern-value {
+                    position: absolute;
+                    top: -28px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-size: 1em;
+                    color: #144272;
+                    font-weight: 700;
+                    background: #fff;
+                    padding: 3px 8px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(20,66,114,0.08);
+                    min-width: 18px;
+                    text-align: center;
+                    z-index: 2;
+                    border: 1px solid #b7e4c7;
+                }
+                .bar-label-x-modern {
+                    margin-top: 12px;
+                    font-size: 1em;
+                    color: #205295;
+                    text-align: center;
+                    width: 100%;
+                    word-break: break-word;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                }
+                .bar-legend-modern {
+                    display: flex;
+                    gap: 36px;
+                    margin: 24px 0 18px 0;
+                    justify-content: center;
+                }
+                .bar-legend-modern span {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 1.08em;
+                    color: #144272;
+                    font-weight: 500;
+                }
+                .bar-legend-modern .bar {
+                    width: 28px;
+                    height: 16px;
+                    border-radius: 6px;
+                    border: 2px solid #144272;
+                }
+                .bar-legend-modern .bar-accepted { border-color: #205295; }
+                .bar-legend-modern .bar-rejected { border-color: #dc3545; }
+                .bar-legend-modern .bar-pending { border-color: #ffc107; }
+                .bar-chart-modern .y-axis-labels {
+                    position: absolute;
+                    left: -48px;
+                    bottom: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end;
+                    height: 100%;
+                    width: 44px;
+                    font-size: 1em;
+                    color: #205295;
+                    z-index: 1;
+                }
+                .bar-chart-modern .y-axis-label {
+                    flex: 1;
+                    text-align: right;
+                    padding-right: 10px;
+                    border: none;
+                    font-weight: 500;
+                }
+                .bar-chart-modern .y-axis-label:not(:last-child) {
+                    border-bottom: 1px dashed #b7e4c7;
+                }
+                @media (max-width: 1100px) {
+                    .bar-chart-modern-inner { min-width: 900px; gap: 18px; }
+                    .bar-group-modern { width: 38px; }
+                    .bar-label-x-modern { font-size: 0.95em; }
+                }
+                @media (max-width: 900px) {
+                    .bar-chart-modern-inner { min-width: 700px; gap: 10px; }
+                    .bar-group-modern { width: 28px; }
+                    .bar-label-x-modern { font-size: 0.85em; }
+                }
+                @media (max-width: 700px) {
+                    .bar-chart-modern-inner { min-width: 500px; gap: 6px; }
+                    .bar-group-modern { width: 22px; }
+                    .bar-label-x-modern { font-size: 0.75em; }
+                }
+            </style>
+            <div class="bar-legend-modern">
+                <span><span class="bar bar-accepted"></span>Accepted</span>
+                <span><span class="bar bar-rejected"></span>Rejected</span>
+                <span><span class="bar bar-pending"></span>Pending</span>
             </div>
-            <div class="dashboard-card">
-                <h2>View Applications</h2>
-                <p>Review and manage applications from candidates.</p>
-                <a href="view_applications.php">View Applications</a>
+            <div class="bar-chart-modern" style="position:relative;">
+                <div class="bar-chart-modern-inner">
+                    <!-- Y-axis labels -->
+                    <div class="y-axis-labels">
+                        <?php
+                        $ticks = 5;
+                        for ($i = $ticks; $i >= 0; $i--) {
+                            $val = round($maxValue * $i / $ticks);
+                            echo '<div class="y-axis-label" style="height:' . (100/$ticks) . '%;">' . $val . '</div>';
+                        }
+                        ?>
+                    </div>
+                    <?php foreach ($labels as $i => $label): ?>
+                    <div class="bar-group-modern">
+                        <div class="bars-stack">
+                            <div class="bar-modern bar-accepted" style="height:<?php echo ($acceptedData[$i]/$maxValue*200); ?>px">
+                                <?php if ($acceptedData[$i] > 0): ?>
+                                    <span class="bar-modern-value"><?php echo $acceptedData[$i]; ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="bar-modern bar-rejected" style="height:<?php echo ($rejectedData[$i]/$maxValue*150); ?>px">
+                                <?php if ($rejectedData[$i] > 0): ?>
+                                    <span class="bar-modern-value"><?php echo $rejectedData[$i]; ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="bar-modern bar-pending" style="height:<?php echo ($pendingData[$i]/$maxValue*100); ?>px">
+                                <?php if ($pendingData[$i] > 0): ?>
+                                    <span class="bar-modern-value"><?php echo $pendingData[$i]; ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="bar-label-x-modern"><?php echo htmlspecialchars($label); ?></div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <div class="dashboard-card">
-                <h2>View Job Listings</h2>
-                <p>Manage your job postings by status.</p>
-                <a href="view_jobs.php">View Jobs</a>
+            <div style="margin-top:32px;text-align:center;">
+                <p style="color:#205295;font-size:1.1em;">
+                    Visualize your application status trends
+                    <?php
+                        // Removed "all years" logic, only show selected year
+                        echo "for $selectedYear";
+                    ?>.
+                </p>
             </div>
+            <?php else: ?>
+                <p style="text-align:center;color:#888;">No analytics data available yet.</p>
+            <?php endif; ?>
+        </div>
+        <!-- End Analytics Section -->
+
+        <!-- Approved Job Listings Section (Alternative Card Design, Title Only) -->
+        <div class="analytics-section" style="max-width:1400px;margin:40px auto 0 auto;background:#fff;padding:32px 32px 28px 32px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.10);overflow:hidden;">
+            <h2 style="text-align:center;color:#144272;margin-bottom:18px;font-size:1.3em;">Approved Job Listings</h2>
+            <?php
+            $stmt = $conn->prepare("SELECT job_id, title FROM jobs WHERE company_name = ? AND status = 'approved' ORDER BY created_at DESC");
+            $stmt->bind_param("s", $company_name);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $approvedJobs = [];
+            while ($row = $result->fetch_assoc()) {
+                $approvedJobs[] = $row;
+            }
+            $hasApproved = count($approvedJobs) > 0;
+            ?>
+            <style>
+                .approved-jobs-cards-alt {
+                    display: grid;
+                    grid-template-columns: repeat(5, minmax(180px, 1fr));
+                    gap: 18px;
+                    margin-top: 18px;
+                    justify-content: flex-start;
+                }
+                .approved-jobs-cards-alt.center {
+                    justify-content: center;
+                }
+                .approved-job-card-alt {
+                    background: linear-gradient(135deg, #e9f5ff 60%, #f8fff8 100%);
+                    border-radius: 18px;
+                    box-shadow: 0 4px 16px rgba(20,66,114,0.10);
+                    padding: 18px 22px;
+                    display: flex;
+                    align-items: center;
+                    min-width: 0;
+                    max-width: 100%;
+                    border: 1.5px solid #b7e4c7;
+                    transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
+                    margin-bottom: 8px;
+                    position: relative;
+                    font-size: 1.07em;
+                    font-weight: 600;
+                    color: #205295;
+                    letter-spacing: 0.2px;
+                }
+                .approved-job-card-alt:hover {
+                    box-shadow: 0 8px 28px rgba(20,66,114,0.16);
+                    border: 1.5px solid #28a745;
+                    transform: translateY(-4px) scale(1.04);
+                    background: linear-gradient(135deg, #e0ffe0 60%, #f8fff8 100%);
+                }
+                .approved-job-icon-alt {
+                    margin-right: 10px;
+                    font-size: 1.3em;
+                    color: #28a745;
+                    opacity: 0.7;
+                    flex-shrink: 0;
+                }
+                @media (max-width: 1200px) {
+                    .analytics-section { max-width: 98vw; }
+                    .approved-jobs-cards-alt { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
+                }
+                @media (max-width: 900px) {
+                    .analytics-section { max-width: 99vw; }
+                    .approved-jobs-cards-alt { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+                }
+                @media (max-width: 700px) {
+                    .approved-jobs-cards-alt { grid-template-columns: 1fr; gap: 10px; }
+                    .approved-job-card-alt { min-width: 95vw; max-width: 98vw; }
+                }
+            </style>
+            <?php if ($hasApproved): ?>
+            <div class="approved-jobs-cards-alt<?php echo (count($approvedJobs) === 1) ? ' center' : ''; ?>">
+            <?php foreach ($approvedJobs as $row): ?>
+                <div class="approved-job-card-alt">
+                    <span class="approved-job-icon-alt">&#10004;</span>
+                    <span><?php echo htmlspecialchars($row['title']); ?></span>
+                </div>
+            <?php endforeach; ?>
+            </div>
+            <?php else: ?>
+                <p style="text-align:center;color:#888;">No approved job listings yet.</p>
+            <?php endif; ?>
+        </div>
+        <!-- End Approved Job Listings Section (Alternative Card Design, Title Only) -->
+
+    </div>
+            <div class="approved-jobs-cards">
+            <?php while ($row = $result->fetch_assoc()): $hasApproved = true; ?>
+                <div class="approved-job-card">
+                    <span class="approved-job-icon">&#10003;</span>
+                    <div class="approved-job-title"><?php echo htmlspecialchars($row['title']); ?></div>
+                    <div class="approved-job-meta">
+                        <strong>Category:</strong> <?php echo htmlspecialchars($row['category']); ?>
+                    </div>
+                    <div class="approved-job-meta">
+                        <strong>Location:</strong> <?php echo htmlspecialchars($row['location']); ?>
+                    </div>
+                    <div class="approved-job-meta">
+                        <strong>Salary:</strong> ₱<?php echo number_format($row['salary'], 2); ?>
+                    </div>
+                    <div class="approved-job-date">
+                        <?php echo htmlspecialchars(date('M d, Y', strtotime($row['created_at']))); ?>
+                    </div>
+                    <div class="approved-job-status">
+                        <?php echo ucfirst($row['status']); ?>
+                    </div>
+                </div>
+            <?php endwhile; ?>
+            </div>
+            <?php if (!$hasApproved): ?>
+                <p style="text-align:center;color:#888;">No approved job listings yet.</p>
+            <?php endif; ?>
         </div>
     </div>
-
+    
     <footer class="footer">
         <p>&copy; <?php echo date("Y"); ?> JobPortal. All rights reserved.</p>
     </footer>
-
 </body>
 </html>

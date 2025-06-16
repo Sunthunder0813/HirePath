@@ -1229,6 +1229,7 @@ while ($row = $job_result->fetch_assoc()) {
                 <span id="navbar-badge" class="nav-badge" style="display: none;">0</span>
             </div>
         </li>
+        <li><a href="view_jobs.php">View Jobs</a></li>  
         <li><a href="company_profile.php" class="active">Company Profile</a></li>
         <li><a href="../../logout.php" <?php if ($force_assign) echo 'class="disabled-link" tabindex="-1" aria-disabled="true"'; ?>>Logout</a></li>
     </ul>
