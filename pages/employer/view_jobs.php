@@ -897,7 +897,7 @@ foreach ($jobs as $job) {
             </li>
             <li><a href="view_jobs.php">View Jobs</a></li>  
             <li><a href="company_profile.php">Company Profile</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="../../logout.php">Logout</a></li>
         </ul>
     </nav>
     <div class="container">
@@ -1046,7 +1046,7 @@ foreach ($jobs as $job) {
                                     <option value="Retail">Retail</option>
                                     <option value="Others">Others</option>
                                 </select>
-                                <input type="text" id="modal-edit-other-category" name="other_category" placeholder="Enter category" style="display:none;margin-top:8px;">
+                                <input type="text" id="modal-edit-other-category" name="other_category" placeholder="Enter category" style="display:none;margin-top:8px;" required>
                             </div>
                             <div class="form-group">
                                 <label for="modal-edit-salary">Salary</label>

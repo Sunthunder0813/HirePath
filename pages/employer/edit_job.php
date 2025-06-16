@@ -8,31 +8,23 @@ include '../../db_connection/connection.php';
 $conn = OpenConnection();
 
 $user_id = $_SESSION['user_id'];
-$job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : (isset($_POST['job_id']) ? intval($_POST['job_id']) : 0);
+$job_id = isset($_POST['job_id']) ? intval($_POST['job_id']) : 0;
 
-if (!$job_id) {
-    header("Location: view_jobs.php");
-    exit();
-}
-
-// Handle update
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $job_id) {
     // Collect all fields from POST
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
-    $category = trim($_POST['category']);
+    // Use 'other_category' if provided, else fallback to 'category'
+    $category = isset($_POST['other_category']) && $_POST['other_category'] !== '' ? trim($_POST['other_category']) : trim($_POST['category']);
     $salary = trim($_POST['salary']);
     $location = trim($_POST['location']);
     $company_name = trim($_POST['company_name']);
     $skills = trim($_POST['skills']);
     $education = trim($_POST['education']);
 
-    // Use the structure provided
-    $stmt = $conn->prepare("UPDATE jobs SET job_id=?, employer_id=?, title=?, description=?, category=?, salary=?, location=?, company_name=?, skills=?, education=? WHERE job_id=? AND employer_id=?");
+    $stmt = $conn->prepare("UPDATE jobs SET title=?, description=?, category=?, salary=?, location=?, company_name=?, skills=?, education=? WHERE job_id=? AND employer_id=?");
     $stmt->bind_param(
-        "iisssdssssii",
-        $job_id,
-        $user_id,
+        "ssssssssii",
         $title,
         $description,
         $category,
@@ -44,6 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $job_id,
         $user_id
     );
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    header("Location: view_jobs.php?updated=1");
+    exit();
+}
+// No output or action if not POST
+?>
     $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -138,19 +138,10 @@ if (!$job) {
             <input type="text" name="category" id="category" value="<?php echo htmlspecialchars($job['category']); ?>">
 
             <label for="salary">Salary</label>
-            <input type="text" name="salary" id="salary" value="<?php echo htmlspecialchars($job['salary']); ?>">
+            <input type="number" name="salary" id="salary" value="<?php echo htmlspecialchars($job['salary']); ?>" min="0" max="10000000" required>
 
             <label for="location">Location</label>
             <input type="text" name="location" id="location" value="<?php echo htmlspecialchars($job['location']); ?>">
-
-            <label for="status">Status</label>
-            <select name="status" id="status">
-                <option value="pending" <?php if($job['status']=='pending') echo 'selected'; ?>>Pending</option>
-                <option value="reviewed" <?php if($job['status']=='reviewed') echo 'selected'; ?>>Reviewed</option>
-                <option value="approved" <?php if($job['status']=='approved') echo 'selected'; ?>>Approved</option>
-                <option value="active" <?php if($job['status']=='active') echo 'selected'; ?>>Active</option>
-                <option value="rejected" <?php if($job['status']=='rejected') echo 'selected'; ?>>Rejected</option>
-            </select>
 
             <label for="company_name">Company Name</label>
             <input type="text" name="company_name" id="company_name" value="<?php echo htmlspecialchars($job['company_name']); ?>">
