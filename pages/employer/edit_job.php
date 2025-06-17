@@ -11,10 +11,10 @@ $user_id = $_SESSION['user_id'];
 $job_id = isset($_POST['job_id']) ? intval($_POST['job_id']) : 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $job_id) {
-    // Collect all fields from POST
+    
     $title = trim($_POST['title']);
     $description = trim($_POST['description']);
-    // Use 'other_category' if provided, else fallback to 'category'
+    
     $category = isset($_POST['other_category']) && $_POST['other_category'] !== '' ? trim($_POST['other_category']) : trim($_POST['category']);
     $salary = trim($_POST['salary']);
     $location = trim($_POST['location']);
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $job_id) {
     exit();
 }
 
-// Fetch job details
+
 $stmt = $conn->prepare("SELECT * FROM jobs WHERE job_id=? AND employer_id=?");
 $stmt->bind_param("ii", $job_id, $user_id);
 $stmt->execute();
@@ -148,7 +148,7 @@ if (!$job) {
     </style>
 </head>
 <body>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -193,14 +193,14 @@ if (!$job) {
         var hiddenInput = document.getElementById("salary");
         let value = displayInput.value.replace(/[^0-9.]/g, '');
 
-        // Allow only one decimal point
+        
         let parts = value.split('.');
         if (parts.length > 2) {
             value = parts[0] + '.' + parts.slice(1).join('');
             parts = value.split('.');
         }
 
-        // Limit to two decimal places if decimal exists
+        
         if (parts.length === 2) {
             parts[1] = parts[1].slice(0,2);
             value = parts[0] + '.' + parts[1];
@@ -259,7 +259,7 @@ if (!$job) {
         return validateSalaryEdit();
     }
 
-    // Initialize salary display on page load
+    
     window.addEventListener('DOMContentLoaded', function() {
         var salary = document.getElementById('salary').value;
         var displayInput = document.getElementById('salary_display');
@@ -271,14 +271,14 @@ if (!$job) {
         }
     });
 
-    // Attach validation to form submit
+    
     document.querySelector('form').addEventListener('submit', function(e) {
         if (!validateSalaryEditOnSubmit()) {
             e.preventDefault();
         }
     });
 
-    // Popup notification logic
+    
     function showPopup(message, type, redirectUrl = null) {
         const popup = document.getElementById('popupNotification');
         const msg = document.getElementById('popupMessage');
@@ -293,7 +293,7 @@ if (!$job) {
         }, 3000);
     }
 
-    // Show update notification if redirected from edit
+    
     (function() {
         const params = new URLSearchParams(window.location.search);
         if (params.get('updated') === '1') {

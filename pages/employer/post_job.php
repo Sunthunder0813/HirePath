@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the user is logged in
+
 if (!isset($_SESSION['username'])) {
     header("Location: employee_sign_in.php");
     exit();
@@ -9,8 +9,8 @@ if (!isset($_SESSION['username'])) {
 
 $username = htmlspecialchars($_SESSION['username']);
 
-// Fetch company name from the database
-include '../../db_connection/connection.php'; // Replace with your actual database connection file
+
+include '../../db_connection/connection.php'; 
 $conn = OpenConnection();
 
 $query = "SELECT company_name FROM `users` WHERE `username` = ?";
@@ -130,12 +130,12 @@ $company_name = $userDetails['company_name'];
             text-decoration: underline;
         }
         .applications-container {
-    position: relative; /* Ensure the badge is positioned relative to the parent container */
+    position: relative; 
 }
         .nav-badge {
     position: absolute;
-    top: -5px; /* Moves it slightly above the tab */
-    right: -5px; /* Moves it slightly outside */
+    top: -5px; 
+    right: -5px; 
     background: #dc3545;
     color: white;
     font-size: 12px;
@@ -177,12 +177,12 @@ $company_name = $userDetails['company_name'];
 </head>
 <body>
 
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
 
-    <!-- Navigation Bar -->
+    
     <nav class="navbar">
         <a href="Employee_dashboard.php" class="logo">Employee Portal</a>
         <ul class="nav-links">
@@ -199,13 +199,13 @@ $company_name = $userDetails['company_name'];
         </ul>
     </nav>
 
-    <!-- Main Content -->
+    
     <div class="container">
         <div class="form-container">
             <h1>Post a New Job</h1>
             <form action="save_job.php" method="POST">
                 <div class="form-grid">
-                    <!-- Left Column -->
+                    
                     <div>
                         
                         <div class="form-group">
@@ -270,7 +270,7 @@ $company_name = $userDetails['company_name'];
     <label for="job_city">City:</label>
     <select id="job_city" name="job_city" required required>
         <option value="">Select a City</option>
-        <!-- Cities will be populated based on the selected region -->
+        
     </select>
 </div>
 <input type="hidden" id="job_location" name="job_location" required>
@@ -289,7 +289,7 @@ $company_name = $userDetails['company_name'];
                         
                     </div>
 
-                    <!-- Right Column -->
+                    
                     <div>
                         <div class="form-group">
                             <label for="job_description">Job Description:</label>
@@ -303,7 +303,7 @@ $company_name = $userDetails['company_name'];
         </div>
     </div>
 
-    <!-- Footer -->
+    
     <footer>
         <p>&copy; <?php echo date("Y"); ?> JobPortal. All rights reserved.</p>
     </footer>
@@ -318,7 +318,7 @@ function toggleOtherCategory() {
     } else {
         otherCategory.style.display = "none";
         otherCategory.removeAttribute("required");
-        otherCategory.value = ""; // Clear input if hidden
+        otherCategory.value = ""; 
     }
     updateFinalCategory();
 }
@@ -334,7 +334,7 @@ function updateFinalCategory() {
     }
 }
 
-// Ensure the correct category is submitted
+
 document.querySelector('form').addEventListener('submit', function(e) {
     updateFinalCategory();
 });
@@ -344,14 +344,14 @@ function formatSalaryInput(isBlur) {
     var hiddenInput = document.getElementById("job_salary");
     let value = displayInput.value.replace(/[^0-9.]/g, '');
 
-    // Allow only one decimal point
+    
     let parts = value.split('.');
     if (parts.length > 2) {
         value = parts[0] + '.' + parts.slice(1).join('');
         parts = value.split('.');
     }
 
-    // Limit to two decimal places if decimal exists
+    
     if (parts.length === 2) {
         parts[1] = parts[1].slice(0,2);
         value = parts[0] + '.' + parts[1];
@@ -360,7 +360,7 @@ function formatSalaryInput(isBlur) {
     if (isBlur) {
         let num = value ? Math.min(parseFloat(value), 100000000) : '';
         if (num !== '' && !isNaN(num)) {
-            // Always show .00 if no decimals
+            
             let formatted = Number(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
             displayInput.value = '₱' + formatted;
             hiddenInput.value = num;
@@ -369,7 +369,7 @@ function formatSalaryInput(isBlur) {
             hiddenInput.value = '';
         }
     } else {
-        // While typing, keep the user's input (with ₱ prefix)
+        
         displayInput.value = value ? '₱' + value : '';
         hiddenInput.value = value && !isNaN(value) ? Math.min(parseFloat(value), 100000000) : '';
     }
@@ -382,10 +382,10 @@ function salaryFocus(isFocused) {
     var salaryError = document.getElementById("salary_error");
     if (!isFocused) {
         salaryError.style.display = "none";
-        // Format with .00 and ₱ when not focused
+        
         formatSalaryInput(true);
     } else {
-        // Remove formatting, allow user to type freely
+        
         formatSalaryInput(false);
         if (!salaryInput.checkValidity()) {
             salaryError.style.display = "inline";
@@ -499,10 +499,10 @@ function updateCities() {
     const jobLocationInput = document.getElementById("job_location");
     const selectedRegion = regionSelect.value;
 
-    // Clear existing options
+    
     citySelect.innerHTML = '<option value="">Select a City</option>';
 
-    // Populate cities based on selected region
+    
     if (selectedRegion && citiesByRegion[selectedRegion]) {
         citiesByRegion[selectedRegion].forEach(city => {
             const option = document.createElement("option");
@@ -512,25 +512,25 @@ function updateCities() {
         });
     }
 
-    // Update hidden input for job location
+    
     const updateLocation = () => {
         const selectedCity = citySelect.value;
         jobLocationInput.value = selectedRegion + (selectedCity ? `, ${selectedCity}` : "");
     };
-    citySelect.removeEventListener("change", updateLocation); // Prevent duplicate listeners
+    citySelect.removeEventListener("change", updateLocation); 
     citySelect.addEventListener("change", updateLocation);
-    updateLocation(); // Update immediately on region change
+    updateLocation(); 
 }
 
-// Ensure job_location is set on page load if region/city are pre-selected
+
 window.addEventListener('DOMContentLoaded', function() {
     updateCities();
-    // Initialize salary display with .00 and ₱ if not focused
+    
     formatSalaryInput(true);
     updateFinalCategory();
 });
 
-// Popup notification logic
+
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -545,7 +545,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }, 3000);
         }
 
-        // Show notification if redirected from save_job.php
+        
         (function() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('success') === '1') {

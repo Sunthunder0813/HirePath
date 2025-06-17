@@ -13,12 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['job_ids']) && is_arra
     $user_id = $_SESSION['user_id'];
     $job_ids = array_map('intval', $_POST['job_ids']);
 
-    // Prepare statement to delete only jobs belonging to this employer
+    
     $in = str_repeat('?,', count($job_ids) - 1) . '?';
     $sql = "DELETE FROM jobs WHERE job_id IN ($in) AND employer_id = ?";
     $stmt = $conn->prepare($sql);
 
-    // Bind parameters dynamically
+    
     $types = str_repeat('i', count($job_ids)) . 'i';
     $params = array_merge($job_ids, [$user_id]);
     $stmt->bind_param($types, ...$params);
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['job_ids']) && is_arra
     header("Location: view_jobs.php?deleted=" . ($deleted > 0 ? 1 : 0));
     exit();
 } else {
-    // Invalid access or no jobs selected
+    
     header("Location: view_jobs.php");
     exit();
 }

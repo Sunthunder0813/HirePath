@@ -1040,13 +1040,13 @@ while ($row = $job_result->fetch_assoc()) {
                 font-size: 0.7em !important;
             }
         }
-        /* Hide flip buttons on very small screens */
+        
         @media (max-width: 600px) {
             #profilePrevBtn, #profileNextBtn {
                 display: none !important;
             }
         }
-        /* Make nav bar and footer compact on mobile */
+        
         @media (max-width: 600px) {
             nav.navbar {
                 flex-direction: column;
@@ -1068,7 +1068,7 @@ while ($row = $job_result->fetch_assoc()) {
                 padding: 4px 0 !important;
             }
         }
-        /* Ensure horizontal scrolling never appears */
+        
         html, body {
             max-width: 100vw;
             overflow-x: hidden;
@@ -1102,13 +1102,13 @@ while ($row = $job_result->fetch_assoc()) {
         }
 
         .applications-container {
-            position: relative; /* Ensure the badge is positioned relative to the parent container */
+            position: relative; 
         }
 
         .nav-badge {
             position: absolute;
-            top: -5px; /* Moves it slightly above the tab */
-            right: -5px; /* Moves it slightly outside */
+            top: -5px; 
+            right: -5px; 
             background: #dc3545;
             color: white;
             font-size: 12px;
@@ -1264,7 +1264,7 @@ while ($row = $job_result->fetch_assoc()) {
 <button id="profileNextBtn" class="profile-flip-btn"></button>
 <script src="../../static/js/get_pending_count.js" defer></script>
 <script>
-// Show shortcut indicator for edit on page load with fade in/out every 5 seconds
+
 document.addEventListener('DOMContentLoaded', function() {
     var shortcutDiv = document.getElementById('editShortcutIndicator');
     if (shortcutDiv) {
@@ -1274,16 +1274,16 @@ document.addEventListener('DOMContentLoaded', function() {
             shortcutDiv.classList.add('visible');
             setTimeout(function() {
                 shortcutDiv.classList.remove('visible');
-            }, 2000); // visible for 2 seconds
+            }, 2000); 
         }, 5000);
-        // Show immediately on load
+        
         setTimeout(function() {
             shortcutDiv.classList.add('visible');
             setTimeout(function() {
                 shortcutDiv.classList.remove('visible');
             }, 2000);
         }, 200);
-        // Optionally, clear interval on navigation away
+        
         window.addEventListener('beforeunload', function() {
             clearInterval(fadeInterval);
         });
@@ -1295,7 +1295,7 @@ function enableEditMode(e) {
     var editModeIndicatorBack = document.getElementById('editModeIndicatorBack');
     if (editModeIndicatorBack) editModeIndicatorBack.style.display = 'block';
 
-    // Show shortcut indicator and update text for save
+    
     var shortcutDiv = document.getElementById('editShortcutIndicator');
     if (shortcutDiv) {
         shortcutDiv.innerHTML = 'Press <b>Ctrl+Alt+S</b> to save changes';
@@ -1393,7 +1393,7 @@ function enableEditMode(e) {
     }
 }
 
-// Show shortcut indicator for edit on page load
+
 document.addEventListener('DOMContentLoaded', function() {
     var shortcutDiv = document.getElementById('editShortcutIndicator');
     if (shortcutDiv) {
@@ -1403,16 +1403,16 @@ document.addEventListener('DOMContentLoaded', function() {
             shortcutDiv.classList.add('visible');
             setTimeout(function() {
                 shortcutDiv.classList.remove('visible');
-            }, 2000); // visible for 2 seconds
+            }, 2000); 
         }, 2000);
-        // Show immediately on load
+        
         setTimeout(function() {
             shortcutDiv.classList.add('visible');
             setTimeout(function() {
                 shortcutDiv.classList.remove('visible');
             }, 2000);
         }, 200);
-        // Optionally, clear interval on navigation away
+        
         window.addEventListener('beforeunload', function() {
             clearInterval(fadeInterval);
         });

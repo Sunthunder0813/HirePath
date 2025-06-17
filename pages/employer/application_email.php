@@ -21,10 +21,10 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
         $mail->addAddress($to);
         $mail->Subject = $subject;
 
-        // If $body is an array, use a simple, clean approval template (no image, clear colors)
+        
         if (is_array($body)) {
             if (!empty($body['rejected'])) {
-                // Rejection email template
+                
                 $mail->Body = "
                     <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(220,53,69,0.10);padding:32px 24px;'>
                         <h2 style='color:#dc3545;text-align:center;margin-bottom:18px;'>Application Update</h2>
@@ -45,7 +45,7 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
                     </div>
                 ";
             } elseif (!empty($body['reviewed'])) {
-                // Reviewed email template
+                
                 $mail->Body = "
                     <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(255,193,7,0.10);padding:32px 24px;'>
                         <h2 style='color:#ffc107;text-align:center;margin-bottom:18px;'>Application Update</h2>
@@ -66,7 +66,7 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
                     </div>
                 ";
             } else {
-                // Approval email template
+                
                 $mail->Body = "
                     <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(20,66,114,0.10);padding:32px 24px;'>
                         <h2 style='color:#144272;text-align:center;margin-bottom:18px;'>Congratulations!</h2>

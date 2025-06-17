@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: relative; /* Add this line */
+            position: relative; 
         }
         h2 {
             color: #0A2647;
@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .back-icon-btn {
             position: absolute;
-            top: 56px; /* Aligns with input field */
+            top: 56px; 
             left: 12px;
             font-size: 1.7rem;
             color: #0A2647;
@@ -357,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: linear-gradient(90deg, #144272 60%, #0A2647 100%);
             box-shadow: 0 4px 16px rgba(10,38,71,0.13);
         }
-        /* Optional: add a subtle label above the input */
+        
         #forgotStep1 label {
             font-size: 1rem;
             color: #0A2647;
@@ -365,7 +365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 500;
             display: block;
         }
-        /* Remove hiding of .forgot-step1-wrapper, etc. */
+        
         .forgot-step1-wrapper,
         .forgot-title,
         .forgot-desc,
@@ -425,7 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -435,7 +435,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="right_section">
         <div class="container">
-            <!-- Sign In header -->
+            
             <h2 id="formHeader">Sign In</h2>
             <?php if (!empty($error)): ?>
                 <p class="error"><?php echo htmlspecialchars($error); ?></p>
@@ -500,7 +500,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="../../static/js/employee_sign_in.js"></script>
     <script>
-        // Toggle between sign in and forgot password forms
+        
         document.addEventListener('DOMContentLoaded', function () {
             var showForgot = document.getElementById('showForgotPassword');
             var backToSignInFooter = document.getElementById('backToSignInFooter');
@@ -559,7 +559,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             }
 
-            // Forgot password step logic
+            
             if (forgotNextBtn) {
                 forgotNextBtn.addEventListener('click', function() {
                     var username = forgot_username.value.trim();
@@ -600,7 +600,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
 
-        // Popup notification logic
+        
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -614,7 +614,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }, 3000);
         }
-        // Show registration success if redirected from registration
+        
         (function() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('reg') === '1') {

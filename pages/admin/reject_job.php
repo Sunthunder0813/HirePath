@@ -1,21 +1,21 @@
 <?php
 session_start();
 
-// Check if the admin is logged in
+
 if (!isset($_SESSION['admin_id'])) {
     header("Location: ../../admin_sign_in.php");
     exit();
 }
 
-// Include database connection
+
 include '../../db_connection/connection.php';
 $conn = OpenConnection();
 
-// Check if job_id is provided
+
 if (isset($_GET['job_id'])) {
     $job_id = intval($_GET['job_id']);
 
-    // Update job status to 'rejected'
+    
     $query = "UPDATE `jobs` SET `status` = 'rejected' WHERE `job_id` = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $job_id);

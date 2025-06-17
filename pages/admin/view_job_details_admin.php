@@ -83,7 +83,7 @@ CloseConnection($conn);
             padding: 0 30px;
             display: flex;
             align-items: center;
-            height: 70px; /* Increased from 60px to 70px for better height */
+            height: 70px; 
             min-height: 70px;
             justify-content: space-between;
         }
@@ -307,13 +307,10 @@ CloseConnection($conn);
             box-shadow: 0 1px 2px rgba(34,34,59,0.04);
         }
         .company-info-bar {
-            /* Remove sticky/fixed positioning */
-            /* position: sticky;
-            top: 0;
-            left: 0; */
+            
             width: 100%;
             z-index: 101;
-            background: #e3eafc; /* Light blue background for visibility */
+            background: #e3eafc; 
             color: #22223b;
             padding: 22px 32px 14px 32px;
             border-radius: 18px 18px 0 0;
@@ -397,9 +394,9 @@ CloseConnection($conn);
             max-height: 100%;
             overflow-y: auto;
             padding-right: 4px;
-            /* Hide scrollbar for all browsers */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
+            
+            scrollbar-width: none; 
+            -ms-overflow-style: none;  
         }
         .joblisting_scrollable::-webkit-scrollbar {
             width: 0;
@@ -428,7 +425,7 @@ CloseConnection($conn);
             </div>
         <?php endif; ?>
         <?php
-        // Always define acronym before use
+        
         $company_name = $company['company_name'] ?? '';
         $words = preg_split('/\s+/', trim($company_name));
         $acronym = '';

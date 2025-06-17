@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the user is logged in
+
 if (!isset($_SESSION['username'])) {
     header("Location: employee_sign_in.php");
     exit();
@@ -38,7 +38,7 @@ if (!$has_company) {
 
     <script src="../../static/js/get_pending_count.js" defer></script>
     <style>
-        /* General Styles */
+        
 * {
     margin: 0;
     padding: 0;
@@ -173,7 +173,7 @@ h1 {
     display: block;
 }
 
-/* Navigation Bar */
+
 .navbar {
     background: #0A2647;
     padding: 15px 20px;
@@ -215,7 +215,7 @@ h1 {
     position: relative;
 }
 
-/* Navigation Bar */
+
 .navbar {
     background: #0A2647;
     padding: 15px 20px;
@@ -258,13 +258,13 @@ h1 {
 }
 
         .applications-container {
-            position: relative; /* Ensure the badge is positioned relative to the parent container */
+            position: relative; 
         }
 
         .nav-badge {
             position: absolute;
-            top: -5px; /* Moves it slightly above the tab */
-            right: -5px; /* Moves it slightly outside */
+            top: -5px; 
+            right: -5px; 
             background: #dc3545;
             color: white;
             font-size: 12px;
@@ -414,7 +414,7 @@ h1 {
     
 </head>
 <body>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -446,12 +446,12 @@ h1 {
             </div>
         <?php endif; ?>
 
-        <!-- Data Analytics Section (HTML/CSS Bar Chart) -->
+        
         <div class="analytics-section" style="max-width:1400px;margin:48px auto 0 auto;background:#fff;padding:40px 32px 32px 32px;border-radius:16px;box-shadow:0 6px 18px rgba(20,66,114,0.10);">
             <h2 style="text-align:center;color:#144272;margin-bottom:32px;font-size:2em;letter-spacing:1px;">Job Application Analytics</h2>
             <form method="get" style="text-align:right;max-width:400px;margin:0 0 18px auto;">
                 <?php
-                    // Find all years with applications for this company
+                    
                     $yearStmt = $conn->prepare("
                         SELECT DISTINCT YEAR(a.applied_at) as year
                         FROM applications a
@@ -478,7 +478,7 @@ h1 {
                 </select>
             </form>
             <?php
-            // Applications per month by status for the selected year
+            
             $appStats = [];
             $statuses = ['accepted', 'rejected', 'pending'];
             foreach ($statuses as $status) {
@@ -675,7 +675,7 @@ h1 {
             </div>
             <div class="bar-chart-modern" style="position:relative;">
                 <div class="bar-chart-modern-inner">
-                    <!-- Y-axis labels -->
+                    
                     <div class="y-axis-labels">
                         <?php
                         $ticks = 5;
@@ -713,7 +713,7 @@ h1 {
                 <p style="color:#205295;font-size:1.1em;">
                     Visualize your application status trends
                     <?php
-                        // Removed "all years" logic, only show selected year
+                        
                         echo "for $selectedYear";
                     ?>.
                 </p>
@@ -722,9 +722,9 @@ h1 {
                 <p style="text-align:center;color:#888;">No analytics data available yet.</p>
             <?php endif; ?>
         </div>
-        <!-- End Analytics Section -->
+        
 
-        <!-- Approved Job Listings Section (Alternative Card Design, Title Only) -->
+        
         <div class="analytics-section" style="max-width:1400px;margin:40px auto 0 auto;background:#fff;padding:32px 32px 28px 32px;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,0.10);overflow:hidden;">
             <h2 style="text-align:center;color:#144272;margin-bottom:18px;font-size:1.3em;">Approved Job Listings</h2>
             <?php
@@ -806,7 +806,7 @@ h1 {
                 <p style="text-align:center;color:#888;">No approved job listings yet.</p>
             <?php endif; ?>
         </div>
-        <!-- End Approved Job Listings Section (Alternative Card Design, Title Only) -->
+        
 
     </div>
             <div class="approved-jobs-cards">
@@ -842,7 +842,7 @@ h1 {
         <p>&copy; <?php echo date("Y"); ?> JobPortal. All rights reserved.</p>
     </footer>
     <script>
-        // Popup notification logic
+        
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -856,7 +856,7 @@ h1 {
                 }
             }, 3000);
         }
-        // Show login success if redirected from sign in
+        
         (function() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('login') === '1') {

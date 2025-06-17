@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the admin is logged in
+
 if (!isset($_SESSION['admin_id'], $_SESSION['admin_username'])) {
     header("Location: ../../admin_sign_in.php");
     exit();
@@ -9,11 +9,11 @@ if (!isset($_SESSION['admin_id'], $_SESSION['admin_username'])) {
 
 $admin_username = htmlspecialchars($_SESSION['admin_username']);
 
-// Include database connection
+
 include '../../db_connection/connection.php';
 $conn = OpenConnection();
 
-// Fetch job posts pending approval with all required fields and company_image from users
+
 $query = "SELECT j.job_id, j.employer_id, j.title, j.description, j.category, j.salary, j.location, j.status, j.created_at, j.company_name, j.skills, j.education, u.company_image
           FROM `jobs` j
           JOIN `users` u ON j.employer_id = u.user_id
@@ -47,7 +47,7 @@ while ($row = $result->fetch_assoc()) {
             padding: 0 30px;
             display: flex;
             align-items: center;
-            height: 70px; /* Match nav height with view_job_details_admin.php */
+            height: 70px; 
             min-height: 70px;
             justify-content: space-between;
         }
@@ -223,7 +223,7 @@ while ($row = $result->fetch_assoc()) {
             bottom: 0;
             z-index: 100;
         }
-        /* Redesigned Modal styles */
+        
         .modal-backdrop {
             display: none;
             position: fixed;
@@ -467,7 +467,7 @@ while ($row = $result->fetch_assoc()) {
             background: #e3eafc;
             color: #c82333;
         }
-        /* Popup Notification styles */
+        
         .popup-notification {
             position: fixed;
             bottom: 32px;
@@ -498,7 +498,7 @@ while ($row = $result->fetch_assoc()) {
         }
     </style>
     <script>
-    // Modal logic
+    
     document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById('jobModal');
         const modalBackdrop = document.getElementById('modalBackdrop');
@@ -534,7 +534,6 @@ while ($row = $result->fetch_assoc()) {
             if (e.key === 'Escape') modalBackdrop.classList.remove('active');
         });
 
-        // Approve/Reject AJAX handlers
         document.getElementById('modalApproveBtn').onclick = function() {
             if (!currentJobId) return;
             window.location.href = 'approve_job.php?job_id=' + encodeURIComponent(currentJobId);
@@ -544,7 +543,7 @@ while ($row = $result->fetch_assoc()) {
             window.location.href = 'reject_job.php?job_id=' + encodeURIComponent(currentJobId);
         };
 
-        // Popup notification logic
+        
         function showPopup(message, type) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -673,7 +672,7 @@ while ($row = $result->fetch_assoc()) {
             </div>
         </div>
     </div>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
