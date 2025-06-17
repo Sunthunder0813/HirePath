@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['job_ids']) && is_arra
     $stmt->close();
     $conn->close();
 
-    header("Location: view_jobs.php?deleted=$deleted");
+    header("Location: view_jobs.php?deleted=" . ($deleted > 0 ? 1 : 0));
     exit();
 } else {
     // Invalid access or no jobs selected

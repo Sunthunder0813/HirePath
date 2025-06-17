@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $job_location = htmlspecialchars($_POST['job_location']);
     $job_skills = htmlspecialchars($_POST['job_skills']);
     $job_education = htmlspecialchars($_POST['job_education']);
-    $status = "pending"; // Default status for a new job
+    $status = "pending"; // Default status for a new job (goes to admin for review)
 
     // Fetch the employer ID and company name from the database
     $query = "SELECT user_id, company_name FROM `users` WHERE `username` = ?";

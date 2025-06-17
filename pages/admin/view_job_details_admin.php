@@ -178,15 +178,37 @@ CloseConnection($conn);
             gap: 10px;
         }
         .profile_card_name {
-            font-size: 1.6em;
-            font-weight: 700;
+            font-size: 2em;
+            font-weight: 800;
             color: #22223b;
-            margin-bottom: 2px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.75);
+            padding: 10px 28px;
+            border-radius: 14px;
+            display: inline-block;
+            box-shadow: 0 4px 24px 0 rgba(34,34,59,0.10), 0 1.5px 6px rgba(34,34,59,0.04);
+            backdrop-filter: blur(2.5px);
+            border: 1.5px solid #e3eafc;
+            letter-spacing: 1.2px;
+            transition: box-shadow 0.2s, border 0.2s;
+        }
+        .profile_card_name:hover {
+            box-shadow: 0 8px 32px 0 rgba(34,34,59,0.18), 0 2px 8px rgba(34,34,59,0.07);
+            border: 1.5px solid #c9ada7;
         }
         .profile_card_tagline {
-            font-size: 1.1em;
+            font-size: 1.15em;
             color: #4a4e69;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            background: rgba(255,255,255,0.65);
+            padding: 7px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 2px 12px 0 rgba(34,34,59,0.08);
+            backdrop-filter: blur(1.5px);
+            border: 1px solid #e3eafc;
+            font-style: italic;
+            letter-spacing: 0.5px;
         }
         .profile_card_divider {
             height: 1px;
@@ -284,6 +306,48 @@ CloseConnection($conn);
             font-weight: 500;
             box-shadow: 0 1px 2px rgba(34,34,59,0.04);
         }
+        .company-info-bar {
+            /* Remove sticky/fixed positioning */
+            /* position: sticky;
+            top: 0;
+            left: 0; */
+            width: 100%;
+            z-index: 101;
+            background: #e3eafc; /* Light blue background for visibility */
+            color: #22223b;
+            padding: 22px 32px 14px 32px;
+            border-radius: 18px 18px 0 0;
+            box-shadow: 0 2px 12px rgba(34,34,59,0.10);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        .company-info-bar .company-name {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            color: #22223b;
+            line-height: 1.1;
+        }
+        .company-info-bar .company-tagline {
+            font-size: 1.13rem;
+            font-weight: 400;
+            color: #4a4e69;
+            margin-bottom: 0;
+        }
+        @media (max-width: 700px) {
+            .company-info-bar {
+                padding: 12px 10px 10px 10px;
+            }
+            .company-info-bar .company-name {
+                font-size: 1.2rem;
+            }
+            .company-info-bar .company-tagline {
+                font-size: 1rem;
+            }
+        }
         @media (max-width: 900px) {
             .company_jobs_list {
                 grid-template-columns: repeat(2, 1fr);
@@ -333,16 +397,16 @@ CloseConnection($conn);
             max-height: 100%;
             overflow-y: auto;
             padding-right: 4px;
+            /* Hide scrollbar for all browsers */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
         }
         .joblisting_scrollable::-webkit-scrollbar {
-            width: 8px;
-        }
-        .joblisting_scrollable::-webkit-scrollbar-thumb {
-            background: #e3eafc;
-            border-radius: 6px;
-        }
-        .joblisting_scrollable::-webkit-scrollbar-track {
+            width: 0;
+            height: 0;
+            display: none;
             background: transparent;
+            -ms-overflow-style: none;
         }
     </style>
 </head>
@@ -448,4 +512,5 @@ CloseConnection($conn);
     }
     </script>
 </body>
+</html>
 </html>

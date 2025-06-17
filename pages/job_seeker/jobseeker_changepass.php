@@ -22,6 +22,7 @@ if (isset($_SESSION['user_id'])) {
 
 $error = '';
 $success = '';
+$otp_status = ''; // Add this line
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['send_otp'])) {
@@ -31,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subject = "Your OTP for Password Change";
         $error = null;
         if (sendEmail($email, $subject, $otp, $username, $error)) {
-            $success = "OTP sent to your email.";
-            echo "<script>alert('OTP has been sent to your email.');</script>";
+            $otp_status = "OTP sent to your email.";
+            // Removed alert
         } else {
-            $error = "Failed to send OTP. Please try again.";
-            echo "<script>alert('Failed to send OTP. Please try again.');</script>";
+            $otp_status = "Failed to send OTP. Please try again.";
+            // Removed alert
         }
     }
 
@@ -410,9 +411,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
             word-break: break-all;
         }
+        /* Popup Notification Styles */
+        .popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
     </style>
 </head>
 <body>
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
+    </div>
     <nav>
         <p class="logo">
             <a href="../../index.php">
@@ -549,11 +583,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         setupPasswordMatchIndicator('newPassword1', 'confirmPassword1', 'matchIndicator1');
         setupPasswordMatchIndicator('newPassword2', 'confirmPassword2', 'matchIndicator2');
+
+        // Popup notification logic
+        function showPopup(message, type, redirectUrl = null) {
+            const popup = document.getElementById('popupNotification');
+            const msg = document.getElementById('popupMessage');
+            popup.className = 'popup-notification ' + type;
+            msg.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }, 3000);
+        }
+
+        // Show OTP send status
+        <?php if (!empty($otp_status)): ?>
+            showPopup(<?php echo json_encode($otp_status); ?>, <?php echo strpos($otp_status, 'Failed') === false ? "'success'" : "'error'"; ?>);
+        <?php endif; ?>
+
+        // Show password change success/failure
         <?php if (!empty($success)): ?>
-            alert("<?php echo ($success); ?>");
+            showPopup(<?php echo json_encode($success); ?>, 'success');
         <?php endif; ?>
         <?php if (!empty($error)): ?>
-            alert("<?php echo ($error); ?>");
+            showPopup(<?php echo json_encode($error); ?>, 'error');
         <?php endif; ?>
     </script>
 </body>

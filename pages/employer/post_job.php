@@ -144,10 +144,43 @@ $company_name = $userDetails['company_name'];
     border-radius: 50%;
     display: inline-block;
 }
+.popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
     </style>
     <script src="../../static/js/get_pending_count.js" defer></script>
 </head>
 <body>
+
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
+    </div>
 
     <!-- Navigation Bar -->
     <nav class="navbar">
@@ -496,6 +529,32 @@ window.addEventListener('DOMContentLoaded', function() {
     formatSalaryInput(true);
     updateFinalCategory();
 });
-</script>
+
+// Popup notification logic
+        function showPopup(message, type, redirectUrl = null) {
+            const popup = document.getElementById('popupNotification');
+            const msg = document.getElementById('popupMessage');
+            popup.className = 'popup-notification ' + type;
+            msg.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }, 3000);
+        }
+
+        // Show notification if redirected from save_job.php
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('success') === '1') {
+                showPopup('Job posted successfully!', 'success');
+            }
+            if (params.get('error') === '1') {
+                showPopup('Failed to post job. Please try again.', 'error');
+            }
+        })();
+    </script>
 </body>
 </html>

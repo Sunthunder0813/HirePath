@@ -2,6 +2,8 @@
 session_start();
 include '../../db_connection/connection.php';
 
+$register_success = false; // Add this line
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
@@ -47,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($stmt->execute()) {
                     $_SESSION['user_id'] = $stmt->insert_id; 
                     $conn->commit(); 
-                    header("Location: sign_in.php"); 
-                    exit;
+                    $register_success = true; // Set success flag
+                    // Do not redirect immediately, let JS handle it
                 } else {
                     $error = "Error creating account: " . $stmt->error;
                     throw new Exception($error); 
@@ -74,9 +76,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../static/img//icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../../static/css/sign_up.css">
+    <style>
+        /* Popup notification styles */
+        .popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center; /* Center text */
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
+        /* Remove close button styling */
+        .popup-notification .close-btn {
+            display: none;
+        }
+    </style>
     <title>Sign Up - Job Portal</title>
 </head>
 <body>
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
+    </div>
     <div class="right_section">
         <div class="container">
             <h2>Sign Up</h2>
@@ -120,5 +161,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <img src="../../static/img/icon/logo_job.png" alt="Hire Path Logo">
     </div>
     <script src="../../static/js/sign_up.js"></script>
+    <script>
+        // Popup notification logic
+        function showPopup(message, type, redirectUrl = null) {
+            const popup = document.getElementById('popupNotification');
+            const msg = document.getElementById('popupMessage');
+            popup.className = 'popup-notification ' + type;
+            msg.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }, 3000);
+        }
+
+        <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
+            <?php if ($register_success): ?>
+                // Show success popup and redirect after fade
+                showPopup('Registration successful!', 'success', 'sign_in.php');
+            <?php elseif (!empty($error)): ?>
+                // Show error popup
+                showPopup(<?php echo json_encode($error); ?>, 'error');
+            <?php endif; ?>
+        <?php endif; ?>
+    </script>
 </body>
 </html>

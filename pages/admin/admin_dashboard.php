@@ -467,6 +467,35 @@ while ($row = $result->fetch_assoc()) {
             background: #e3eafc;
             color: #c82333;
         }
+        /* Popup Notification styles */
+        .popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
     </style>
     <script>
     // Modal logic
@@ -514,6 +543,31 @@ while ($row = $result->fetch_assoc()) {
             if (!currentJobId) return;
             window.location.href = 'reject_job.php?job_id=' + encodeURIComponent(currentJobId);
         };
+
+        // Popup notification logic
+        function showPopup(message, type) {
+            const popup = document.getElementById('popupNotification');
+            const msg = document.getElementById('popupMessage');
+            popup.className = 'popup-notification ' + type;
+            msg.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        <?php
+        if (!empty($_SESSION['message'])) {
+            $msg = addslashes($_SESSION['message']);
+            echo "window.addEventListener('DOMContentLoaded',function(){showPopup('{$msg}','success');});";
+            unset($_SESSION['message']);
+        }
+        if (!empty($_SESSION['error'])) {
+            $msg = addslashes($_SESSION['error']);
+            echo "window.addEventListener('DOMContentLoaded',function(){showPopup('{$msg}','error');});";
+            unset($_SESSION['error']);
+        }
+        ?>
     });
     </script>
 </head>
@@ -570,7 +624,6 @@ while ($row = $result->fetch_assoc()) {
         <?php endif; ?>
     </div>
     
-    <!-- Modal -->
     <div class="modal-backdrop" id="modalBackdrop">
         <div class="modal-content" id="jobModal">
             <button class="modal-close" id="modalClose" title="Close">&times;</button>
@@ -619,6 +672,10 @@ while ($row = $result->fetch_assoc()) {
                 <button class="btn btn-reject" id="modalRejectBtn">Reject</button>
             </div>
         </div>
+    </div>
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
     </div>
     <footer class="footer">
         <p>&copy; <?php echo date("Y"); ?> JobPortal. All rights reserved.</p>

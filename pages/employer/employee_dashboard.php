@@ -380,10 +380,44 @@ h1 {
             text-align: center;
             font-weight: bold;
         }   
+
+        /* Popup Notification */
+        .popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
     </style>
     
 </head>
 <body>
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
+    </div>
 
     <nav class="navbar">
         <a href="Employee_dashboard.php" class="logo">Employee Portal</a>
@@ -807,5 +841,31 @@ h1 {
     <footer class="footer">
         <p>&copy; <?php echo date("Y"); ?> JobPortal. All rights reserved.</p>
     </footer>
+    <script>
+        // Popup notification logic
+        function showPopup(message, type, redirectUrl = null) {
+            const popup = document.getElementById('popupNotification');
+            const msg = document.getElementById('popupMessage');
+            popup.className = 'popup-notification ' + type;
+            msg.textContent = message;
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }, 3000);
+        }
+        // Show login success if redirected from sign in
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('login') === '1') {
+                showPopup('Login successful!', 'success');
+            }
+            if (params.get('success') === '1') {
+                showPopup('Job posted successfully, Wait for Admin to Approve!', 'success');
+            }
+        })();
+    </script>
 </body>
 </html>

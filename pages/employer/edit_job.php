@@ -117,9 +117,41 @@ if (!$job) {
             color: red;
             display: none;
         }
+        .popup-notification {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            min-width: 260px;
+            max-width: 350px;
+            padding: 18px 32px 18px 18px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1em;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s, transform 0.5s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            text-align: center;
+        }
+        .popup-notification.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-notification.success {
+            background: #28a745;
+        }
+        .popup-notification.error {
+            background: #dc3545;
+        }
     </style>
 </head>
 <body>
+    <!-- Popup Notification -->
+    <div id="popupNotification" class="popup-notification">
+        <span id="popupMessage"></span>
+    </div>
     <div class="edit-job-container">
         <h2>Edit Job</h2>
         <form method="post" onsubmit="return validateSalaryEdit();">
@@ -245,6 +277,29 @@ if (!$job) {
             e.preventDefault();
         }
     });
+
+    // Popup notification logic
+    function showPopup(message, type, redirectUrl = null) {
+        const popup = document.getElementById('popupNotification');
+        const msg = document.getElementById('popupMessage');
+        popup.className = 'popup-notification ' + type;
+        msg.textContent = message;
+        popup.classList.add('show');
+        setTimeout(() => {
+            popup.classList.remove('show');
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+        }, 3000);
+    }
+
+    // Show update notification if redirected from edit
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('updated') === '1') {
+            showPopup('Job updated successfully!', 'success');
+        }
+    })();
     </script>
 </body>
 </html>
