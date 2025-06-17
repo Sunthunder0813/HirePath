@@ -218,11 +218,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             height: 22px;
             user-select: none;
         }
-        /* Adjust label spacing for consistency */
+        
         .form_group label {
             margin-bottom: 6px;
         }
-        /* Remove default button margin-top for better alignment */
+        
         form button[type="submit"] {
             margin-top: 16px;
         }
@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -332,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
 
-        // Popup notification logic
+        
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');

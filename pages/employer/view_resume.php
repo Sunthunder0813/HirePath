@@ -15,7 +15,7 @@ $application_id = intval($_GET['application_id']);
 include '../../db_connection/connection.php';
 $conn = OpenConnection();
 
-// Fetch resume link and applicant info, including current status
+
 $stmt = $conn->prepare("SELECT a.resume_link, u.email, u.username, j.title, e.company_name, a.status
     FROM applications a
     JOIN users u ON a.job_seeker_id = u.user_id
@@ -31,7 +31,7 @@ if (!$stmt->fetch()) {
 }
 $stmt->close();
 
-// If status is 'pending', set to 'reviewed' and send reviewed email
+
 if ($status === 'pending') {
     $stmt = $conn->prepare("UPDATE applications SET status = 'reviewed' WHERE application_id = ?");
     $stmt->bind_param("i", $application_id);
@@ -48,9 +48,9 @@ if ($status === 'pending') {
     sendEmail($email, $subject, $body, $username);
 }
 
-// Display the resume (PDF, DOC, etc.)
+
 if (!empty($resume_link)) {
-    // Adjust path to point to the correct resumes directory
+    
     $resume_path = "../../job_seeker/resumes/" . basename($resume_link);
     if (file_exists($resume_path)) {
         header('Content-Type: application/pdf');

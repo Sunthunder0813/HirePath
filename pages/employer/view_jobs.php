@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the user is logged in
+
 if (!isset($_SESSION['user_id'], $_SESSION['username'])) {
     header("Location: employee_sign_in.php");
     exit();
@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id'], $_SESSION['username'])) {
 $user_id = $_SESSION['user_id'];
 $username = htmlspecialchars($_SESSION['username']);
 
-// Include database connection
+
 include '../../db_connection/connection.php';
 $conn = OpenConnection();
 
-// Fetch jobs posted by this employer
+
 $query = "SELECT * FROM jobs WHERE employer_id = ? ORDER BY created_at DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
@@ -79,17 +79,17 @@ foreach ($jobs as $job) {
         }
         .application-list {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+            grid-template-columns: repeat(3, 1fr); 
             gap: 15px;
             padding: 0;
             list-style: none;
             max-height: 60vh;
             overflow-y: auto;
-            justify-items: center; /* Center cards in their columns */
+            justify-items: center; 
         }
         .application-card {
-            width: 100%; /* Fill grid cell */
-            max-width: 340px; /* Prevent stretching */
+            width: 100%; 
+            max-width: 340px; 
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
@@ -129,7 +129,7 @@ foreach ($jobs as $job) {
         .btn {
             text-decoration: none;
             padding: 8px 12px;
-            background: #343a40; /* Changed to match navbar */
+            background: #343a40; 
             color: white;
             border-radius: 5px;
             text-align: center;
@@ -138,7 +138,7 @@ foreach ($jobs as $job) {
             transition: background 0.3s ease;
         }
         .btn:hover {
-            background: #23272b; /* Slightly darker for hover */
+            background: #23272b; 
         }
         .no-applications {
             text-align: center;
@@ -216,9 +216,9 @@ foreach ($jobs as $job) {
             outline: none;
             min-width: 140px;
             text-align: center;
-            justify-content: center; /* Center content horizontally if using flex */
-            display: flex;           /* Ensure flex is used for alignment */
-            align-items: center;     /* Center content vertically */
+            justify-content: center; 
+            display: flex;           
+            align-items: center;     
         }
         .tools-dropdown .dropdown-content {
             display: none;
@@ -518,11 +518,11 @@ foreach ($jobs as $job) {
                 });
             });
 
-            // Activate the first tab by default
+            
             tabs[0].classList.add('active');
             tabContents[0].classList.add('active');
 
-            // Fetch and update the pending applications count
+            
             function updatePendingCount() {
                 fetch('get_pending_count.php')
                     .then(response => response.json())
@@ -535,9 +535,9 @@ foreach ($jobs as $job) {
             }
 
             updatePendingCount();
-            setInterval(updatePendingCount, 5000); // Update every 5 seconds
+            setInterval(updatePendingCount, 5000); 
 
-            // Fetch and update the navbar applications count
+            
             function updateNavbarCount() {
                 fetch('get_pending_count.php')
                     .then(response => response.json())
@@ -550,26 +550,26 @@ foreach ($jobs as $job) {
             }
 
             updateNavbarCount();
-            setInterval(updateNavbarCount, 5000); // Update every 5 seconds
+            setInterval(updateNavbarCount, 5000); 
 
-            // Multi-delete logic
+            
             const toolsDeleteLink = document.getElementById('tools-delete-link');
             const deleteBar = document.getElementById('delete-bar');
             let selecting = false;
 
-            // --- Edit mode logic ---
+            
             const toolsEditLink = document.getElementById('tools-edit-link');
             const editBar = document.getElementById('edit-bar');
             const modalBackdrop = document.getElementById('modal-backdrop');
             const modalEditJob = document.getElementById('modal-edit-job');
             let editing = false;
 
-            // Track selected job ids
+            
             let selectedJobIds = new Set();
 
             function updateDeleteBtn() {
                 document.getElementById('delete-selected-btn').disabled = selectedJobIds.size === 0;
-                // Update the count in the button
+                
                 const countSpan = document.getElementById('delete-selected-count');
                 if (countSpan) countSpan.textContent = `(${selectedJobIds.size})`;
             }
@@ -582,7 +582,7 @@ foreach ($jobs as $job) {
 
             if (toolsDeleteLink) {
                 toolsDeleteLink.addEventListener('click', () => {
-                    // If editing mode is active, turn it off before enabling deleting mode
+                    
                     if (editing) {
                         editing = false;
                         document.body.classList.remove('editing-mode');
@@ -600,7 +600,7 @@ foreach ($jobs as $job) {
                 });
             }
 
-            // Card click for selection
+            
             document.querySelectorAll('.application-card').forEach(card => {
                 card.addEventListener('click', function(e) {
                     if (!document.body.classList.contains('deleting-mode')) return;
@@ -621,7 +621,7 @@ foreach ($jobs as $job) {
                 });
             });
 
-            // Cancel selection
+            
             const cancelBtn = document.getElementById('cancel-delete-btn');
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', () => {
@@ -633,7 +633,7 @@ foreach ($jobs as $job) {
                 });
             }
 
-            // On submit, only submit selected job_ids
+            
             const deleteForm = document.getElementById('delete-form');
             if (deleteForm) {
                 deleteForm.addEventListener('submit', function(e) {
@@ -642,9 +642,9 @@ foreach ($jobs as $job) {
                         e.preventDefault();
                         return;
                     }
-                    // Uncheck all checkboxes first
+                    
                     document.querySelectorAll('.select-checkbox').forEach(cb => cb.checked = false);
-                    // Check only selected
+                    
                     selectedJobIds.forEach(id => {
                         const cb = document.querySelector('.select-checkbox[value="' + id + '"]');
                         if (cb) cb.checked = true;
@@ -652,13 +652,13 @@ foreach ($jobs as $job) {
                 });
             }
 
-            // Hide checkboxes and bar by default
+            
             document.querySelectorAll('.select-checkbox').forEach(cb => cb.style.display = 'none');
             if (deleteBar) deleteBar.style.display = 'none';
 
             if (toolsEditLink) {
                 toolsEditLink.addEventListener('click', () => {
-                    // If deleting mode is active, turn it off before enabling editing mode
+                    
                     if (selecting) {
                         selecting = false;
                         document.body.classList.remove('deleting-mode');
@@ -677,30 +677,30 @@ foreach ($jobs as $job) {
                 });
             }
 
-            // Card click for edit selection and open modal
+            
             document.querySelectorAll('.application-card').forEach(card => {
                 card.addEventListener('click', function(e) {
                     if (!document.body.classList.contains('editing-mode')) return;
                     e.preventDefault();
-                    // Remove previous selection
+                    
                     document.querySelectorAll('.application-card.editing').forEach(c => c.classList.remove('selected'));
                     card.classList.add('selected');
-                    // Get jobId
+                    
                     const checkbox = card.querySelector('.select-checkbox');
                     const jobId = checkbox ? checkbox.value : null;
 
-                    // Find the job data from PHP array (rendered as JS object)
+                    
                     let jobData = null;
                     if (window.allJobs && Array.isArray(window.allJobs)) {
                         jobData = window.allJobs.find(j => String(j.job_id) === String(jobId));
                     }
 
-                    // Fill modal fields with job data
+                    
                     if (jobData) {
                         document.getElementById('modal-edit-job-id').value = jobData.job_id || '';
                         document.getElementById('modal-edit-title').value = jobData.title || '';
                         document.getElementById('modal-edit-description').value = jobData.description || '';
-                        // --- Category logic start ---
+                        
                         const categorySelect = document.getElementById('modal-edit-category');
                         const otherCategoryInput = document.getElementById('modal-edit-other-category');
                         let found = false;
@@ -718,13 +718,13 @@ foreach ($jobs as $job) {
                             otherCategoryInput.value = "";
                         }
                         toggleOtherCategoryEdit();
-                        // --- Category logic end ---
+                        
                         document.getElementById('modal-edit-salary').value = jobData.salary || '';
-                        // Set region/city if available
+                        
                         if (jobData.location) {
                             let [region, city] = jobData.location.split(',').map(s => s.trim());
                             document.getElementById('modal-edit-region').value = region || '';
-                            // Call updateCitiesEdit and set city after options are populated
+                            
                             setTimeout(() => {
                                 updateCitiesEdit();
                                 setTimeout(() => {
@@ -743,7 +743,7 @@ foreach ($jobs as $job) {
                         document.getElementById('modal-edit-skills').value = jobData.skills || '';
                         document.getElementById('modal-edit-education').value = jobData.education || '';
                     } else {
-                        // fallback: clear fields
+                        
                         document.getElementById('modal-edit-job-id').value = jobId || '';
                         document.getElementById('modal-edit-title').value = card.querySelector('.job-title').textContent.trim();
                         document.getElementById('modal-edit-description').value = '';
@@ -760,7 +760,7 @@ foreach ($jobs as $job) {
                         document.getElementById('modal-edit-skills').value = '';
                         document.getElementById('modal-edit-education').value = '';
                     }
-                    // Show the modal and backdrop, and ensure modal is visually structured
+                    
                     modalBackdrop.style.display = 'block';
                     modalBackdrop.classList.add('active');
                     modalEditJob.style.display = 'block';
@@ -769,7 +769,7 @@ foreach ($jobs as $job) {
                 });
             });
 
-            // Cancel edit selection
+            
             const cancelEditBtn = document.getElementById('cancel-edit-btn');
             if (cancelEditBtn) {
                 cancelEditBtn.addEventListener('click', () => {
@@ -780,7 +780,7 @@ foreach ($jobs as $job) {
                 });
             }
 
-            // Close modal
+            
             document.getElementById('modal-edit-cancel').onclick = function() {
                 modalBackdrop.style.display = 'none';
                 modalBackdrop.classList.remove('active');
@@ -796,14 +796,14 @@ foreach ($jobs as $job) {
                 document.querySelectorAll('.application-card.editing').forEach(card => card.classList.remove('selected'));
             };
 
-            // Cancel edit mode if modal is closed
+            
             document.getElementById('modal-edit-form').addEventListener('submit', function() {
                 document.body.classList.remove('editing-mode');
                 document.querySelectorAll('.application-card').forEach(card => card.classList.remove('editing', 'selected'));
             });
         });
 
-        // Add JS for category/region/city handling for edit modal
+        
         function toggleOtherCategoryEdit() {
             var jobCategory = document.getElementById("modal-edit-category");
             var otherCategory = document.getElementById("modal-edit-other-category");
@@ -817,7 +817,7 @@ foreach ($jobs as $job) {
             }
         }
 
-        // Cities by region for edit modal
+        
         const citiesByRegion = {
             "NCR": [
                 "Alabang", "Las Piñas", "Makati", "Malabon", "Manila", 
@@ -927,20 +927,20 @@ foreach ($jobs as $job) {
             });
         }
 
-        // --- Modal Salary Formatting/Validation (Peso, .00) ---
+        
         function formatSalaryModalInput(isBlur) {
             var displayInput = document.getElementById("modal-edit-salary-display");
             var hiddenInput = document.getElementById("modal-edit-salary");
             let value = displayInput.value.replace(/[^0-9.]/g, '');
 
-            // Allow only one decimal point
+            
             let parts = value.split('.');
             if (parts.length > 2) {
                 value = parts[0] + '.' + parts.slice(1).join('');
                 parts = value.split('.');
             }
 
-            // Limit to two decimal places if decimal exists
+            
             if (parts.length === 2) {
                 parts[1] = parts[1].slice(0,2);
                 value = parts[0] + '.' + parts[1];
@@ -992,7 +992,7 @@ foreach ($jobs as $job) {
             }
         }
 
-        // On modal open, initialize salary display
+        
         function setModalSalaryDisplay(salary) {
             var displayInput = document.getElementById('modal-edit-salary-display');
             var hiddenInput = document.getElementById('modal-edit-salary');
@@ -1006,26 +1006,26 @@ foreach ($jobs as $job) {
             }
         }
 
-        // Patch into modal population logic
+        
         document.addEventListener('DOMContentLoaded', () => {
-            // ...existing code...
+            
             document.querySelectorAll('.application-card').forEach(card => {
                 card.addEventListener('click', function(e) {
-                    // ...existing code...
+                    
                     if (jobData) {
-                        // ...existing code...
+                        
                         setModalSalaryDisplay(jobData.salary || '');
-                        // ...existing code...
+                        
                     } else {
-                        // ...existing code...
+                        
                         setModalSalaryDisplay('');
-                        // ...existing code...
+                        
                     }
-                    // ...existing code...
+                    
                 });
             });
-            // ...existing code...
-            // On modal form submit, ensure salary is formatted and valid
+            
+            
             document.getElementById('modal-edit-form').addEventListener('submit', function(e) {
                 formatSalaryModalInput(true);
                 var salaryInput = document.getElementById("modal-edit-salary");
@@ -1037,12 +1037,12 @@ foreach ($jobs as $job) {
             });
         });
 
-        // On modal open (in case of manual open), also format salary
+        
         window.addEventListener('DOMContentLoaded', function() {
             setModalSalaryDisplay(document.getElementById('modal-edit-salary').value);
         });
 
-        // Popup notification logic
+        
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -1057,7 +1057,7 @@ foreach ($jobs as $job) {
             }, 3000);
         }
 
-        // Show notifications for delete/update
+        
         (function() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('deleted') === '1') {
@@ -1072,12 +1072,12 @@ foreach ($jobs as $job) {
         })();
     </script>
     <?php
-    // Output all jobs as a JS array for modal population
+    
     echo "<script>window.allJobs = " . json_encode($jobs, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_HEX_AMP) . ";</script>";
     ?>
 </head>
 <body>
-    <!-- Popup Notification -->
+    
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -1214,7 +1214,7 @@ foreach ($jobs as $job) {
                 <h1>Edit Job</h1>
                 <form method="post" action="edit_job.php" id="modal-edit-form">
                     <div class="form-grid">
-                        <!-- Left Column -->
+                        
                         <div>
                             <div class="form-group">
                                 <label for="modal-edit-title">Job Title</label>
@@ -1295,7 +1295,7 @@ foreach ($jobs as $job) {
                                 <input type="hidden" name="company_name" id="modal-edit-company-name-hidden">
                             </div>
                         </div>
-                        <!-- Right Column -->
+                        
                         <div>
                             <div class="form-group" style="height:100%;">
                                 <label for="modal-edit-description">Job Description</label>

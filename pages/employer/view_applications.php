@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Check if the user is logged in
+
 if (!isset($_SESSION['user_id'], $_SESSION['username'])) {
     header("Location: employee_sign_in.php");
     exit();
@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id'], $_SESSION['username'])) {
 $user_id = $_SESSION['user_id'];
 $username = htmlspecialchars($_SESSION['username']);
 
-// Include database connection
-include '../../db_connection/connection.php'; // Replace with your actual database connection file
+
+include '../../db_connection/connection.php'; 
 $conn = OpenConnection();
 
-// Fetch job applications
+
 $query = "SELECT a.*, j.title AS job_title, u.username AS applicant_name, a.resume_link
           FROM `applications` a
           JOIN `jobs` j ON a.job_id = j.job_id
@@ -84,15 +84,15 @@ foreach ($applications as $application) {
         }
         .application-list {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
+            grid-template-columns: repeat(3, 1fr); 
             gap: 15px;
             padding: 0;
             list-style: none;
-            justify-items: center; /* Center cards in their columns */
+            justify-items: center; 
         }
         .application-card {
-            width: 100%; /* Make cards fill their grid cell */
-            max-width: 340px; /* Prevent cards from stretching too wide */
+            width: 100%; 
+            max-width: 340px; 
             background: #f8f9fa;
             padding: 15px;
             border-radius: 8px;
@@ -166,8 +166,8 @@ foreach ($applications as $application) {
         
         .tab-badge {
     position: absolute;
-    top: 0px; /* Moves it slightly above the tab */
-    right: 0px; /* Moves it slightly outside */
+    top: 0px; 
+    right: 0px; 
     background: #dc3545;
     color: white;
     font-size: 12px;
@@ -177,12 +177,12 @@ foreach ($applications as $application) {
     display: inline-block;
 }
 .applications-container {
-    position: relative; /* Ensure the badge is positioned relative to the parent container */
+    position: relative; 
 }
         .nav-badge {
     position: absolute;
-    top: -5px; /* Moves it slightly above the tab */
-    right: -5px; /* Moves it slightly outside */
+    top: -5px; 
+    right: -5px; 
     background: #dc3545;
     color: white;
     font-size: 12px;
@@ -219,11 +219,11 @@ foreach ($applications as $application) {
                 });
             });
 
-            // Activate the first tab by default
+            
             tabs[0].classList.add('active');
             tabContents[0].classList.add('active');
 
-            // Fetch and update the pending applications count
+            
             function updatePendingCount() {
                 fetch('/Hirepath/static/js/get_pending_count.php')
                     .then(response => response.json())
@@ -236,9 +236,9 @@ foreach ($applications as $application) {
             }
 
             updatePendingCount();
-            setInterval(updatePendingCount, 5000); // Update every 5 seconds
+            setInterval(updatePendingCount, 5000); 
 
-            // Fetch and update the navbar applications count
+            
             function updateNavbarCount() {
                 fetch('/Hirepath/static/js/get_pending_count.php')
                     .then(response => response.json())
@@ -251,7 +251,7 @@ foreach ($applications as $application) {
             }
 
             updateNavbarCount();
-            setInterval(updateNavbarCount, 5000); // Update every 5 seconds
+            setInterval(updateNavbarCount, 5000); 
         });
     </script>
 </head>

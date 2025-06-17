@@ -1,27 +1,27 @@
 <?php
 session_start();
 
-// Check if the user is logged in
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: employee_sign_in.php");
     exit();
 }
 
-// Include database connection
+
 include '../../db_connection/connection.php';   
 $conn = OpenConnection();
 
-// Get application ID from the query string
+
 if (isset($_GET['application_id'])) {
     $application_id = intval($_GET['application_id']);
 
-    // Update the application status to "rejected"
+    
     $query = "UPDATE `applications` SET `status` = 'rejected' WHERE `application_id` = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $application_id);
 
     if ($stmt->execute()) {
-        // Fetch applicant's email, username, job title, and company name
+        
         $stmt2 = $conn->prepare("SELECT u.email, u.username, j.title, e.company_name
             FROM applications a
             JOIN users u ON a.job_seeker_id = u.user_id
@@ -34,7 +34,7 @@ if (isset($_GET['application_id'])) {
         $stmt2->fetch();
         $stmt2->close();
 
-        // Send rejection email
+        
         require_once 'application_email.php';
         $subject = $company_name;
         $body = [
