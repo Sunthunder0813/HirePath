@@ -76,11 +76,11 @@ $conn->close();
     <title>Upload Resume</title>
     <style>
         body {
-    font-family: 'Poppins', sans-serif; /* Match nav font */
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     background-color: #f4f4f4;
-    padding-top: 60px; /* Account for fixed nav */
-    color: #333; /* Consistent text color */
+    padding-top: 60px;
+    color: #333;
 }
 nav {
 background: #333;
@@ -96,32 +96,32 @@ z-index: 1000;
 }
 
 .logo a {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Vertically center the logo */
+    display: flex;
+    align-items: center;
     text-decoration: none;
     margin-left: 10px;
     color: white;
-    font-size: 1.5em; /* Slightly larger for better emphasis */
-    font-weight: 600; /* Medium weight for a modern look */
+    font-size: 1.5em;
+    font-weight: 600;
     font-family: 'Poppins', sans-serif;
-    letter-spacing: 1px; /* Subtle spacing for a refined appearance */
+    letter-spacing: 1px;
     transition: color 0.3s ease;
 }
 
 .logo a img {
     display: block;
-    height: 40px; /* Fixed height */
-    margin-left: 10px; /* Maintain spacing */
-    transition: transform 0.3s ease; /* Add hover effect */
-    object-fit: contain; /* Ensure the image fits within the height */
+    height: 40px;
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+    object-fit: contain;
 }
 
 .logo a:hover {
-color: #00c6ff; /* A bright accent color for interactivity */
+color: #00c6ff;
 }
 
 .logo a:hover img {
-    transform: scale(1.1); /* Slight zoom effect on hover */
+    transform: scale(1.1);
 }
 
 .nav-links {
@@ -175,12 +175,12 @@ position: absolute;
 top: 145%;
 left: 0;
 background-color: #ffffff;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 list-style: none;
-padding: 10px 0; /* Added padding for spacing */
+padding: 10px 0;
 margin: 0;
-border-radius: 8px; /* Rounded corners */
-min-width: 100%; /* Match the width of the email container */
+border-radius: 8px;
+min-width: 100%;
 z-index: 1000;
 }
 
@@ -194,29 +194,22 @@ display: block;
 
 .profile-dropdown .dropdown-menu li {
 border-bottom: 1px solid #f0f0f0;
-text-align: center; /* Center the text */
+text-align: center;
 }
 
 .profile-dropdown .dropdown-menu li a {
 text-decoration: none;
 color: #333;
-font-size: 14px; /* Slightly larger font for readability */
+font-size: 14px;
 display: block;
 transition: background 0.3s ease, color 0.3s ease;
-text-align: center; /* Ensure the link text is centered */
+text-align: center;
 }
 
 .profile-dropdown .dropdown-menu li a:hover {
 background-color: #f8f9fa;
 color: #007BFF;
 }
-
-
-/*====================================================*/
-
-
-
-
 
 
 
@@ -228,11 +221,11 @@ color: #007BFF;
     flex-wrap: wrap;
     gap: 20px;
     max-width: 1400px;
-    margin: 80px auto 0; /* Add top margin to align with nav height */
+    margin: 80px auto 0;
     background: #ffffff;
     padding: 30px;
-    border-radius: 16px; /* Softer corners */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 .left-section, .right-section {
     flex: 1;
@@ -254,7 +247,7 @@ color: #007BFF;
     overflow-y: auto;
 }
 h2, h3 {
-    color: #2c3e50; /* Darker heading color */
+    color: #2c3e50;
     margin-bottom: 20px;
     font-weight: 700;
     font-size: 1.8rem;

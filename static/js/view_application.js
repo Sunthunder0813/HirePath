@@ -1,8 +1,7 @@
 function timeAgo(dateString) {
     const now = new Date();
     const appliedDate = new Date(dateString);
-    const seconds = Math.floor((now.getTime() - appliedDate.getTime()) / 1000); // Ensure accurate time difference
-
+    const seconds = Math.floor((now.getTime() - appliedDate.getTime()) / 1000); 
     const intervals = [
         { label: 'year', seconds: 31536000 },
         { label: 'month', seconds: 2592000 },
@@ -48,7 +47,6 @@ function restoreResumeViewedState() {
         if (localStorage.getItem(`resumeViewed_${applicationId}`)) {
             button.textContent = "Resume viewed";
             button.style.background = "#6c757d";
-            // Allow the button to remain clickable
         }
     });
 }

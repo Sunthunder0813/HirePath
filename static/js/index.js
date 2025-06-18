@@ -201,7 +201,7 @@ function populateCities() {
     const citySelect = document.getElementById('city_select');
     const selectedRegion = regionSelect.value;
     
-    citySelect.innerHTML = ''; // Remove placeholder
+    citySelect.innerHTML = ''; 
 
     if (selectedRegion && regions[selectedRegion]) {
         regions[selectedRegion].forEach(city => {

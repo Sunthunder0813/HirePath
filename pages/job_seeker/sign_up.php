@@ -2,7 +2,7 @@
 session_start();
 include '../../db_connection/connection.php';
 
-$register_success = false; // Add this line
+$register_success = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
@@ -49,8 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($stmt->execute()) {
                     $_SESSION['user_id'] = $stmt->insert_id; 
                     $conn->commit(); 
-                    $register_success = true; // Set success flag
-                    // Do not redirect immediately, let JS handle it
+                    $register_success = true;
                 } else {
                     $error = "Error creating account: " . $stmt->error;
                     throw new Exception($error); 
@@ -77,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="shortcut icon" href="../../static/img//icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../../static/css/sign_up.css">
     <style>
-        /* Popup notification styles */
         .popup-notification {
             position: fixed;
             bottom: 32px;
@@ -93,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             pointer-events: none;
             transition: opacity 0.5s, transform 0.5s;
             box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-            text-align: center; /* Center text */
+            text-align: center;
         }
         .popup-notification.show {
             opacity: 1;
@@ -106,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .popup-notification.error {
             background: #dc3545;
         }
-        /* Remove close button styling */
         .popup-notification .close-btn {
             display: none;
         }
@@ -114,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Sign Up - Job Portal</title>
 </head>
 <body>
-    <!-- Popup Notification -->
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -162,7 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <script src="../../static/js/sign_up.js"></script>
     <script>
-        // Popup notification logic
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -179,10 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
             <?php if ($register_success): ?>
-                // Show success popup and redirect after fade
                 showPopup('Registration successful!', 'success', 'sign_in.php');
             <?php elseif (!empty($error)): ?>
-                // Show error popup
                 showPopup(<?php echo json_encode($error); ?>, 'error');
             <?php endif; ?>
         <?php endif; ?>

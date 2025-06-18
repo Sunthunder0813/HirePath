@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id'])) {
 
 $error = '';
 $success = '';
-$otp_status = ''; // Add this line
+$otp_status = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['send_otp'])) {
@@ -33,10 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = null;
         if (sendEmail($email, $subject, $otp, $username, $error)) {
             $otp_status = "OTP sent to your email.";
-            // Removed alert
         } else {
             $otp_status = "Failed to send OTP. Please try again.";
-            // Removed alert
         }
     }
 
@@ -118,10 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../static/img/icon/favicon.png" type="image/x-icon">
-    
-
     <title>Change Password - Job Portal</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -356,7 +351,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .otp_row button:hover {
             background: #555; 
         }
-        /* Password input wrapper and toggle icon styles */
         .input_wrapper {
             position: relative;
             width: 100%;
@@ -375,7 +369,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             user-select: none;
             z-index: 2;
             width: 24px;
-            /* Remove height: 100%; and display: flex; align-items: center; */
         }
         .password_toggle_icon img {
             width: 24px;
@@ -411,7 +404,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
             word-break: break-all;
         }
-        /* Popup Notification Styles */
         .popup-notification {
             position: fixed;
             bottom: 32px;
@@ -443,7 +435,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <!-- Popup Notification -->
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -539,7 +530,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="../../static/js/jobseeker_changepass.js"></script>
     <script>
-        // Password toggle logic (similar to sign_up.js)
         function setupPasswordToggle(inputId, toggleId, imageId) {
             const input = document.getElementById(inputId);
             const toggle = document.getElementById(toggleId);
@@ -560,7 +550,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setupPasswordToggle('newPassword2', 'toggleNewPassword2', 'newPassword2ToggleImage');
         setupPasswordToggle('confirmPassword2', 'toggleConfirmPassword2', 'confirmPassword2ToggleImage');
 
-        // Password match indicator logic
         function setupPasswordMatchIndicator(newId, confirmId, indicatorId) {
             const newInput = document.getElementById(newId);
             const confirmInput = document.getElementById(confirmId);
@@ -584,7 +573,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         setupPasswordMatchIndicator('newPassword1', 'confirmPassword1', 'matchIndicator1');
         setupPasswordMatchIndicator('newPassword2', 'confirmPassword2', 'matchIndicator2');
 
-        // Popup notification logic
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -599,7 +587,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }, 3000);
         }
 
-        // Show OTP send status
+        <?php if (!empty($otp_status)): ?>
+            showPopup(<?php echo json_encode($otp_status); ?>, <?php echo strpos($otp_status, 'Failed') === false ? "'success'" : "'error'"; ?>);
+        <?php endif; ?>
+
+        <?php if (!empty($success)): ?>
+            showPopup(<?php echo json_encode($success); ?>, 'success');
+        <?php endif; ?>
+        <?php if (!empty($error)): ?>
+            showPopup(<?php echo json_encode($error); ?>, 'error');
+        <?php endif; ?>
+    </script>
+</body>
+</html>
         <?php if (!empty($otp_status)): ?>
             showPopup(<?php echo json_encode($otp_status); ?>, <?php echo strpos($otp_status, 'Failed') === false ? "'success'" : "'error'"; ?>);
         <?php endif; ?>

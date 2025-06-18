@@ -1,24 +1,20 @@
 <?php
 session_start();
 
-// Check if the admin is already logged in
 if (isset($_SESSION['admin_id'], $_SESSION['admin_username'])) {
     header("Location: pages/admin/admin_dashboard.php");
     exit();
 }
 
-// Include database connection
 include 'db_connection/connection.php';
 $conn = OpenConnection();
 
 $error = "";
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Fetch admin details from the database
     $query = "SELECT * FROM `users` WHERE `username` = ? AND `user_type` = 'admin'";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $username);
@@ -27,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin = $result->fetch_assoc();
 
     if ($admin && $password === $admin['password']) {
-        // Set session variables
         $_SESSION['admin_id'] = $admin['user_id'];
         $_SESSION['admin_username'] = $admin['username'];
         $_SESSION['message'] = "Login successfully!";
@@ -130,12 +125,10 @@ $conn->close();
     <div class="left_section">
         <img src="static/img/icon/logo_admin.png" alt="Hire Path Logo">
     </div>
-    <!-- Popup Notification -->
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
     <script>
-        // Eye toggle for password field
         function setupPasswordToggle(inputId, toggleId, imgId) {
             const input = document.getElementById(inputId);
             const toggle = document.getElementById(toggleId);
@@ -152,7 +145,6 @@ $conn->close();
         }
         setupPasswordToggle('password', 'togglePassword', 'passwordToggleImage');
 
-        // Popup notification logic
         function showPopup(message, type) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');

@@ -47,7 +47,6 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
     }
 }
 
-// --- AJAX handler for OTP ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
     include '../../db_connection/connection.php';
     $email = trim($_POST['email']);
@@ -65,14 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
             if ($stmt->num_rows > 0) {
                 $stmt->bind_result($username);
                 $stmt->fetch();
-                // Generate OTP
                 $otp = rand(100000, 999999);
-                // Store OTP in session (or DB for production)
                 session_start();
                 $_SESSION['otp_email'] = $email;
                 $_SESSION['otp_code'] = $otp;
                 $_SESSION['otp_time'] = time();
-                // Send email using PHPMailer
                 $subject = "Your Hire Path OTP Code";
                 $error = null;
                 if (sendEmail($email, $subject, $otp, $username, $error)) {
@@ -90,6 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         CloseConnection($conn);
     }
     header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+?>
     echo json_encode($response);
     exit;
 }

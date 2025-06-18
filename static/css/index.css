@@ -489,7 +489,6 @@ body {
             background: #f4f8fb;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 600px) {
             #filter_modal > div.filter_modal_card {
                 max-width: 98vw;

@@ -2,13 +2,10 @@
 session_start();
 include '../../db_connection/connection.php';
 
-// Prevent undefined array key warnings
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-// Only handle sign in here
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['password'])) {
-    // Sign in logic
     $conn = OpenConnection();
     if ($conn) {
         $stmt = $conn->prepare("SELECT user_id, password FROM users WHERE email=?");
@@ -20,10 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
                 $stmt->bind_result($user_id, $hashed_password);
                 $stmt->fetch();
                 if (password_verify($password, $hashed_password)) {
-                    // Password is correct, set session variables
                     $_SESSION['user_id'] = $user_id;
                     $_SESSION['email'] = $email;
-                    // Redirect to dashboard or home page
                     header("Location: ../../index.php?login=1");
                     exit;
                 } else {
@@ -59,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
         .password_toggle_icon {
             display: flex !important;
         }
-        /* Popup notification styles */
         .popup-notification {
             position: fixed;
             bottom: 32px;
@@ -75,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
             pointer-events: none;
             transition: opacity 0.5s, transform 0.5s;
             box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-            text-align: center; /* Center text */
+            text-align: center;
         }
         .popup-notification.show {
             opacity: 1;
@@ -88,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
         .popup-notification.error {
             background: #dc3545;
         }
-        /* Remove close button styling */
         .popup-notification .close-btn {
             display: none;
         }
@@ -108,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
     </style>
 </head>
 <body>
-    <!-- Popup Notification -->
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -137,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
         <img src="../../static/img/icon/logo_job.png" alt="Hire Path Logo">
     </div>
     <script>
-        // Popup notification logic
         function showPopup(message, type, redirectUrl = null) {
             const popup = document.getElementById('popupNotification');
             const msg = document.getElementById('popupMessage');
@@ -153,11 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
         }
 
         <?php if (isset($error)): ?>
-            // Show error popup
             showPopup(<?php echo json_encode($error); ?>, 'error');
         <?php endif; ?>
 
-        // Eye toggle for password field
         function setupPasswordToggle(inputId, toggleId, imgId) {
             const input = document.getElementById(inputId);
             const toggle = document.getElementById(toggleId);

@@ -10,7 +10,7 @@ if (
     if (
         $_SESSION['otp_email'] === $email &&
         $_SESSION['otp_code'] == $code &&
-        (time() - $_SESSION['otp_time']) <= 600 // 10 min
+        (time() - $_SESSION['otp_time']) <= 600
     ) {
         echo json_encode(['success' => true]);
     } else {
@@ -19,3 +19,4 @@ if (
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid or expired OTP.']);
 }
+?>

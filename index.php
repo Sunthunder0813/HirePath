@@ -89,11 +89,10 @@ if (!$result) {
     die("Query failed: " . $conn->error);
 }
 
-// Check for initial login
 $isInitialLogin = false;
 if (isset($_SESSION['initial_login']) && $_SESSION['initial_login'] === true) {
     $isInitialLogin = true;
-    unset($_SESSION['initial_login']); // Only trigger once
+    unset($_SESSION['initial_login']);
 }
 ?>
 <!DOCTYPE html>
@@ -104,7 +103,6 @@ if (isset($_SESSION['initial_login']) && $_SESSION['initial_login'] === true) {
     <link rel="shortcut icon" href="static/img/icon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="static/css/index.css">
     <style>
-        /* Popup notification styles */
         .popup-notification {
             position: fixed;
             bottom: 32px;
@@ -120,7 +118,7 @@ if (isset($_SESSION['initial_login']) && $_SESSION['initial_login'] === true) {
             pointer-events: none;
             transition: opacity 0.5s, transform 0.5s;
             box-shadow: 0 4px 16px rgba(0,0,0,0.13);
-            text-align: center; /* Center text */
+            text-align: center;
         }
         .popup-notification.show {
             opacity: 1;
@@ -137,7 +135,6 @@ if (isset($_SESSION['initial_login']) && $_SESSION['initial_login'] === true) {
     <title>HirePath</title>
 </head>
 <body>
-    <!-- Popup Notification -->
     <div id="popupNotification" class="popup-notification">
         <span id="popupMessage"></span>
     </div>
@@ -419,7 +416,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     <?php else: ?>
-    // Always select the first job in the list on every page load
     var firstJob = document.querySelector('.job_listings .job');
     if (firstJob) {
         firstJob.scrollIntoView({behavior: "smooth", block: "center"});
@@ -430,7 +426,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-    // Popup notification logic
     function showPopup(message, type, redirectUrl = null) {
         const popup = document.getElementById('popupNotification');
         const msg = document.getElementById('popupMessage');
@@ -445,7 +440,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
-    // Show logout/login notification if logout=1 or login=1 in URL
     (function() {
         const params = new URLSearchParams(window.location.search);
         if (params.get('logout') === '1') {

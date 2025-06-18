@@ -2,18 +2,15 @@
 $status = $_GET['status'] ?? 'failure';
 
 session_start();
-include '../../db_connection/connection.php'; // Include your database connection file
+include '../../db_connection/connection.php';
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: sign_in.php'); // Redirect to sign-in if not logged in
+    header('Location: sign_in.php');
     exit();
 }
 
-// Open the database connection
-$conn = OpenConnection(); // Call the function to open the connection
+$conn = OpenConnection();
 
-// Fetch user details (username and email) in a single query
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $stmt = $conn->prepare("SELECT username, email FROM users WHERE user_id = ?");
@@ -32,16 +29,16 @@ if (isset($_SESSION['user_id'])) {
     <title>Application Status</title>
     <style>
         html, body {
-    height: 100%; /* Ensure full height */
-    overflow: hidden; /* Prevent scrolling */
+    height: 100%; 
+    overflow: hidden;
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* Match nav font */
+    font-family: 'Poppins', sans-serif; 
     margin: 0;
     background-color: #f4f4f4;
-    padding-top: 60px; /* Account for fixed nav */
-    color: #333; /* Consistent text color */
+    padding-top: 60px; 
+    color: #333;
 }
 nav {
 background: #333;
@@ -57,24 +54,24 @@ z-index: 1000;
 }
 
 .logo a {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Vertically center the logo */
+    display: flex; 
+    align-items: center; 
     text-decoration: none;
     margin-left: 10px;
     color: white;
-    font-size: 1.5em; /* Slightly larger for better emphasis */
-    font-weight: 600; /* Medium weight for a modern look */
+    font-size: 1.5em; 
+    font-weight: 600; 
     font-family: 'Poppins', sans-serif;
-    letter-spacing: 1px; /* Subtle spacing for a refined appearance */
+    letter-spacing: 1px; 
     transition: color 0.3s ease;
 }
 
 .logo a img {
     display: block;
-    height: 40px; /* Fixed height */
-    margin-left: 10px; /* Maintain spacing */
-    transition: transform 0.3s ease; /* Add hover effect */
-    object-fit: contain; /* Ensure the image fits within the height */
+    height: 40px;
+    margin-left: 10px; 
+    transition: transform 0.3s ease; 
+    object-fit: contain; 
 }
 
 
@@ -129,12 +126,12 @@ position: absolute;
 top: 145%;
 left: 0;
 background-color: #ffffff;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enhanced shadow for depth */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 list-style: none;
-padding: 10px 0; /* Added padding for spacing */
+padding: 10px 0; 
 margin: 0;
-border-radius: 8px; /* Rounded corners */
-min-width: 100%; /* Match the width of the email container */
+border-radius: 8px; 
+min-width: 100%;
 z-index: 1000;
 }
 
@@ -148,16 +145,16 @@ display: block;
 
 .profile-dropdown .dropdown-menu li {
 border-bottom: 1px solid #f0f0f0;
-text-align: center; /* Center the text */
+text-align: center; 
 }
 
 .profile-dropdown .dropdown-menu li a {
 text-decoration: none;
 color: #333;
-font-size: 14px; /* Slightly larger font for readability */
+font-size: 14px; 
 display: block;
 transition: background 0.3s ease, color 0.3s ease;
-text-align: center; /* Ensure the link text is centered */
+text-align: center; 
 }
 
 .profile-dropdown .dropdown-menu li a:hover {
@@ -165,71 +162,67 @@ background-color: #f8f9fa;
 color: #007BFF;
 }
 
-/*====================================================*/
 
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh; /* Increase height for a larger appearance */
-    padding: 40px; /* Increase padding for more spacing */
-    background: linear-gradient(135deg, #f4f4f4, #e8e8e8); /* Subtle gradient background */
+    height: 80vh; 
+    padding: 40px;
+    background: linear-gradient(135deg, #f4f4f4, #e8e8e8);
 }
 
 .status-message {
     text-align: center;
-    padding: 80px; /* Increase padding for a larger appearance */
+    padding: 80px; 
     background: #ffffff;
-    border-radius: 16px; /* Slightly more rounded corners */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
-    margin: 0 auto; /* Center horizontally */
-    max-width: 1000px; /* Increase width for better visibility */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effects */
+    border-radius: 16px; 
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); 
+    margin: 0 auto; 
+    max-width: 1000px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
 .status-message h2 {
-    font-size: 2.5rem; /* Increase font size for better emphasis */
+    font-size: 2.5rem; 
     margin-bottom: 25px;
-    font-weight: bold; /* Make the heading more prominent */
+    font-weight: bold;
 }
 
-/* Success status */
 .status-message.success h2 {
-    color: #28a745; /* Green for success */
+    color: #28a745;
 }
 
-/* Already applied status */
 .status-message.already-applied h2 {
-    color: #ffc107; /* Yellow for already applied */
+    color: #ffc107;
 }
 
-/* Failure status */
 .status-message.failure h2 {
-    color: #dc3545; /* Red for failure */
+    color: #dc3545; 
 }
 
 .status-message p {
-    font-size: 1.2rem; /* Slightly larger font for readability */
+    font-size: 1.2rem;
     color: #555;
     margin-bottom: 25px;
-    line-height: 1.8; /* Improve readability */
+    line-height: 1.8;
 }
 
 .status-message .button {
     display: inline-block;
-    padding: 15px 30px; /* Larger button for better visibility */
+    padding: 15px 30px;
     background: #007bff;
     color: white;
     text-decoration: none;
-    border-radius: 10px; /* Slightly more rounded corners */
-    font-size: 1.1rem; /* Increase font size for better visibility */
+    border-radius: 10px;
+    font-size: 1.1rem;
     font-weight: bold;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .status-message .button:hover {
     background: #0056b3;
-    transform: scale(1.05); /* Slightly larger zoom effect */
+    transform: scale(1.05);
 }
 
 .status-message .button:active {
@@ -299,11 +292,14 @@ color: #007BFF;
         }
     });
 
-    // Prevent dropdown menu from closing when clicking inside it
     const dropdownMenu = document.querySelector('.profile-dropdown .dropdown-menu');
     dropdownMenu.addEventListener('click', (e) => {
         e.stopPropagation();
     });
+});
+</script>
+</body>
+</html>
 });
 </script>
 </body>

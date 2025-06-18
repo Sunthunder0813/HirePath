@@ -1,9 +1,8 @@
 function updateNavbarCount() {
-    // Update the fetch path to point to the correct PHP endpoint
     fetch('../../pages/employer/get_pending_count.php')
         .then(response => response.json())
         .then(data => {
-            console.log('Pending count response:', data); // Debug log
+            console.log('Pending count response:', data); 
             const navbarBadge = document.getElementById('navbar-badge');
             if (navbarBadge) {
                 navbarBadge.textContent = data.count;
