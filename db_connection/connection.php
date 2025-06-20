@@ -3,7 +3,7 @@ function OpenConnection()
 {
     $dbhost = "localhost";
     $dbuser = "root"; 
-    $dbpass = "";     
+    $dbpass = "SANTANDER13";     
     $dbname = "job_portal"; 
 
     $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
