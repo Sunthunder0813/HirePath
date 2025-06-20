@@ -24,66 +24,57 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
         
         if (is_array($body)) {
             if (!empty($body['rejected'])) {
-                
                 $mail->Body = "
-                    <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(220,53,69,0.10);padding:32px 24px;'>
-                        <h2 style='color:#dc3545;text-align:center;margin-bottom:18px;'>Application Update</h2>
-                        <p style='font-size:16px;color:#222;text-align:center;margin-bottom:18px;'>
-                            Dear <strong>" . htmlspecialchars($body['username']) . "</strong>,
+                    <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Application Update</h2>
+                        <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
+                            Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
                         </p>
-                        <p style='font-size:15px;color:#333;text-align:center;margin-bottom:18px;'>
-                            We appreciate your interest in <strong style='color:#144272;'>" . htmlspecialchars($body['company_name']) . "</strong> and your application for <strong style='color:#007bff;'>" . htmlspecialchars($body['job_title']) . "</strong>.
+                        <p style='font-size:14px;color:#444;margin-bottom:16px;text-align:center;'>
+                            Thank you for applying to <strong>" . htmlspecialchars($body['company_name']) . "</strong> for the <strong>" . htmlspecialchars($body['job_title']) . "</strong> position.
                         </p>
-                        <p style='font-size:14px;color:#444;text-align:center;margin-bottom:22px;'>
-                            After careful consideration, we regret to inform you that your application was not selected for this position.
+                        <p style='font-size:14px;color:#666;margin-bottom:18px;text-align:center;'>
+                            We regret to inform you that your application was not selected.
                         </p>
-                        <div style='margin-top:24px;text-align:center;'>
-                            <span style='display:inline-block;background:#dc3545;color:#fff;padding:8px 24px;border-radius:6px;font-size:14px;'>Best wishes,<br><strong>" . htmlspecialchars($body['company_name']) . "</strong></span>
-                        </div>
-                        <hr style='border:none;border-top:1px solid #eee;margin:28px 0 14px 0;'>
-                        <p style='font-size:12px;color:#aaa;text-align:center;'>This is an automated email from Hire Path. Please do not reply to this message.</p>
+                        <p style='font-size:13px;color:#888;text-align:center;margin-top:24px;'>- " . htmlspecialchars($body['company_name']) . " Team</p>
+                        <hr style='border:none;border-top:1px solid #eee;margin:22px 0 10px 0;'>
+                        <p style='font-size:11px;color:#bbb;text-align:center;'>Automated email from Hire Path</p>
                     </div>
                 ";
             } elseif (!empty($body['reviewed'])) {
-                
                 $mail->Body = "
-                    <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(255,193,7,0.10);padding:32px 24px;'>
-                        <h2 style='color:#ffc107;text-align:center;margin-bottom:18px;'>Application Update</h2>
-                        <p style='font-size:16px;color:#222;text-align:center;margin-bottom:18px;'>
-                            Dear <strong>" . htmlspecialchars($body['username']) . "</strong>,
+                    <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Application Status</h2>
+                        <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
+                            Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
                         </p>
-                        <p style='font-size:15px;color:#333;text-align:center;margin-bottom:18px;'>
-                            Your application for <strong style='color:#007bff;'>" . htmlspecialchars($body['job_title']) . "</strong> at <strong style='color:#144272;'>" . htmlspecialchars($body['company_name']) . "</strong> is currently <span style='color:#ffc107;font-weight:bold;'>under review</span>.
+                        <p style='font-size:14px;color:#444;margin-bottom:16px;text-align:center;'>
+                            Your application for <strong>" . htmlspecialchars($body['job_title']) . "</strong> at <strong>" . htmlspecialchars($body['company_name']) . "</strong> is under review.
                         </p>
-                        <p style='font-size:14px;color:#444;text-align:center;margin-bottom:22px;'>
-                            We appreciate your patience. You will be notified once a decision has been made.
+                        <p style='font-size:14px;color:#666;margin-bottom:18px;text-align:center;'>
+                            We will notify you once a decision is made.
                         </p>
-                        <div style='margin-top:24px;text-align:center;'>
-                            <span style='display:inline-block;background:#ffc107;color:#fff;padding:8px 24px;border-radius:6px;font-size:14px;'>Best regards,<br><strong>" . htmlspecialchars($body['company_name']) . "</strong></span>
-                        </div>
-                        <hr style='border:none;border-top:1px solid #eee;margin:28px 0 14px 0;'>
-                        <p style='font-size:12px;color:#aaa;text-align:center;'>This is an automated email from Hire Path. Please do not reply to this message.</p>
+                        <p style='font-size:13px;color:#888;text-align:center;margin-top:24px;'>- " . htmlspecialchars($body['company_name']) . " Team</p>
+                        <hr style='border:none;border-top:1px solid #eee;margin:22px 0 10px 0;'>
+                        <p style='font-size:11px;color:#bbb;text-align:center;'>Automated email from Hire Path</p>
                     </div>
                 ";
             } else {
-                
                 $mail->Body = "
-                    <div style='font-family:Poppins,Arial,sans-serif;max-width:440px;margin:auto;background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(20,66,114,0.10);padding:32px 24px;'>
-                        <h2 style='color:#144272;text-align:center;margin-bottom:18px;'>Congratulations!</h2>
-                        <p style='font-size:16px;color:#222;text-align:center;margin-bottom:18px;'>
-                            Dear <strong>" . htmlspecialchars($body['username']) . "</strong>,
+                    <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Congratulations!</h2>
+                        <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
+                            Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
                         </p>
-                        <p style='font-size:15px;color:#333;text-align:center;margin-bottom:18px;'>
-                            Your application for <strong style='color:#007bff;'>" . htmlspecialchars($body['job_title']) . "</strong> at <strong style='color:#144272;'>" . htmlspecialchars($body['company_name']) . "</strong> has been <span style='color:#28a745;font-weight:bold;'>approved</span>.
+                        <p style='font-size:14px;color:#444;margin-bottom:16px;text-align:center;'>
+                            Your application for <strong>" . htmlspecialchars($body['job_title']) . "</strong> at <strong>" . htmlspecialchars($body['company_name']) . "</strong> has been approved.
                         </p>
-                        <p style='font-size:14px;color:#444;text-align:center;margin-bottom:22px;'>
-                            We will contact you soon with the next steps.
+                        <p style='font-size:14px;color:#666;margin-bottom:18px;text-align:center;'>
+                            We will contact you soon with next steps.
                         </p>
-                        <div style='margin-top:24px;text-align:center;'>
-                            <span style='display:inline-block;background:#144272;color:#fff;padding:8px 24px;border-radius:6px;font-size:14px;'>Best regards,<br><strong>" . htmlspecialchars($body['company_name']) . "</strong></span>
-                        </div>
-                        <hr style='border:none;border-top:1px solid #eee;margin:28px 0 14px 0;'>
-                        <p style='font-size:12px;color:#aaa;text-align:center;'>This is an automated email from Hire Path. Please do not reply to this message.</p>
+                        <p style='font-size:13px;color:#888;text-align:center;margin-top:24px;'>- " . htmlspecialchars($body['company_name']) . " Team</p>
+                        <hr style='border:none;border-top:1px solid #eee;margin:22px 0 10px 0;'>
+                        <p style='font-size:11px;color:#bbb;text-align:center;'>Automated email from Hire Path</p>
                     </div>
                 ";
             }

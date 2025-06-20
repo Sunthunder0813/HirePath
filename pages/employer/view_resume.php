@@ -40,12 +40,12 @@ if ($status === 'pending') {
     require_once 'application_email.php';
     $subject = $company_name;
     $body = [
-        'username' => $username,
+        'username' => $username, // Ensure username is included in the body
         'job_title' => $job_title,
         'company_name' => $company_name,
         'reviewed' => true
     ];
-    sendEmail($email, $subject, $body, $username);
+    sendEmail($email, $subject, $body, $username); // username is also passed as argument
 }
 
 

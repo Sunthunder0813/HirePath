@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .then(response => response.text())
                     .then(() => {
-                        const endTime = Date.now() + 60000; // 1 minute = 60000 ms
+                        const endTime = Date.now() + 60000;
                         localStorage.setItem('otpEndTime', endTime);
                         startCountdown(sendOtpButton, endTime);
                         alert('OTP has been sent to your email.');
