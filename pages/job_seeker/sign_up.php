@@ -117,7 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="right_section">
         <div class="container">
             <h2>Sign Up</h2>
-            <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
             <form action="sign_up.php" method="POST">
                 <div class="form_group">
                     <input type="text" name="username" placeholder="Register Username" required>

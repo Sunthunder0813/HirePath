@@ -360,6 +360,9 @@ while ($row = $result->fetch_assoc()) {
             margin-top: 0;
             box-shadow: 0 1px 8px rgba(34,34,59,0.08);
             white-space: pre-line;
+            /* Add scroll for long descriptions */
+            max-height: 440px;
+            overflow-y: auto;
         }
         .modal-actions {
             margin-top: 40px;

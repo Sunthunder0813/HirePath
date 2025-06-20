@@ -107,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email'], $_POST['passw
     <div class="right_section">
         <div class="container">
             <h2 id="form-title">Sign In</h2>
-            <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
             <form id="signInForm" action="sign_in.php" method="POST">
                 <div class="form_group">
                     <input type="email" name="email" placeholder="Your Email" required>
