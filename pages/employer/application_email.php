@@ -26,6 +26,9 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
             if (!empty($body['rejected'])) {
                 $mail->Body = "
                     <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <div style='background:#ffdddd;color:#a94442;padding:10px 16px;border-radius:4px;margin-bottom:18px;text-align:center;font-weight:bold;border:1px solid #f5c6cb;'>
+                            Application Rejected
+                        </div>
                         <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Application Update</h2>
                         <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
                             Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
@@ -44,6 +47,9 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
             } elseif (!empty($body['reviewed'])) {
                 $mail->Body = "
                     <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <div style='background:#e7f3fe;color:#31708f;padding:10px 16px;border-radius:4px;margin-bottom:18px;text-align:center;font-weight:bold;border:1px solid #bce8f1;'>
+                            Application Under Review
+                        </div>
                         <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Application Status</h2>
                         <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
                             Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
@@ -62,6 +68,9 @@ function sendEmail($to, $subject, $body, $username, &$error = null) {
             } else {
                 $mail->Body = "
                     <div style='font-family:sans-serif;max-width:420px;margin:auto;background:#fff;border-radius:6px;border:1px solid #eee;padding:28px 20px;'>
+                        <div style='background:#d4edda;color:#155724;padding:10px 16px;border-radius:4px;margin-bottom:18px;text-align:center;font-weight:bold;border:1px solid #c3e6cb;'>
+                            Application Approved
+                        </div>
                         <h2 style='color:#222;font-size:20px;margin-bottom:14px;text-align:center;'>Congratulations!</h2>
                         <p style='font-size:15px;color:#222;margin-bottom:14px;text-align:center;'>
                             Dear <strong>" . htmlspecialchars(isset($body['username']) ? $body['username'] : $username) . "</strong>,
