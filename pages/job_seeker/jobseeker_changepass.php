@@ -351,6 +351,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .otp_row button:hover {
             background: #555; 
         }
+        .otp_row button.otp-disabled,
+        .otp_row button:disabled {
+            background: #aaa !important;
+            color: #fff !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+        /* Prevent hover effect when disabled */
+        .otp_row button.otp-disabled:hover {
+            background: #aaa !important;
+        }
         .input_wrapper {
             position: relative;
             width: 100%;
@@ -591,20 +602,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             showPopup(<?php echo json_encode($otp_status); ?>, <?php echo strpos($otp_status, 'Failed') === false ? "'success'" : "'error'"; ?>);
         <?php endif; ?>
 
-        <?php if (!empty($success)): ?>
-            showPopup(<?php echo json_encode($success); ?>, 'success');
-        <?php endif; ?>
-        <?php if (!empty($error)): ?>
-            showPopup(<?php echo json_encode($error); ?>, 'error');
-        <?php endif; ?>
-    </script>
-</body>
-</html>
-        <?php if (!empty($otp_status)): ?>
-            showPopup(<?php echo json_encode($otp_status); ?>, <?php echo strpos($otp_status, 'Failed') === false ? "'success'" : "'error'"; ?>);
-        <?php endif; ?>
-
-        // Show password change success/failure
         <?php if (!empty($success)): ?>
             showPopup(<?php echo json_encode($success); ?>, 'success');
         <?php endif; ?>

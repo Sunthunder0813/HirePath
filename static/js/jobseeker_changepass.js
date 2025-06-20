@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sendOtpButton.addEventListener('click', () => {
                 if (!sendOtpButton.disabled) {
                     sendOtpButton.disabled = true;
+                    sendOtpButton.classList.add('otp-disabled');
                     sendOtpButton.textContent = 'Sending...';
 
                     const formData = new FormData();
@@ -34,13 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .then(response => response.text())
                     .then(() => {
-                        const endTime = Date.now() + 120000;
+                        const endTime = Date.now() + 60000; // 1 minute = 60000 ms
                         localStorage.setItem('otpEndTime', endTime);
                         startCountdown(sendOtpButton, endTime);
                         alert('OTP has been sent to your email.');
                     })
                     .catch(() => {
                         sendOtpButton.disabled = false;
+                        sendOtpButton.classList.remove('otp-disabled');
                         sendOtpButton.textContent = 'Send OTP';
                         alert('Failed to send OTP. Please try again.');
                     });
@@ -63,12 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (remainingTime <= 0) {
                         clearInterval(countdownInterval);
                         button.disabled = false;
+                        button.classList.remove('otp-disabled');
                         button.textContent = 'Send OTP';
                         localStorage.removeItem('otpEndTime');
                     } else {
-                        const minutes = Math.floor(remainingTime / 60000);
                         const seconds = Math.floor((remainingTime % 60000) / 1000);
-                        button.textContent = `Resend OTP (${minutes}:${seconds < 10 ? '0' : ''}${seconds})`;
+                        button.disabled = true;
+                        button.classList.add('otp-disabled');
+                        button.textContent = `Resend OTP (${seconds}s)`;
                     }
                 }, 1000);
             }

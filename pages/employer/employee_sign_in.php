@@ -220,8 +220,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             <p class="footer">
                 <span class="footer-content">
-                    <span>Don't have an account?</span>
-                    <a href="regEmployee.php">Sign Up</a>
+                    <span style="color:#0A2647;font-weight:600;">
+                        Use your <u>Job Seeker</u> credentials to log in as Employer.
+                    </span>
                 </span>
             </p>
         </div>

@@ -53,6 +53,10 @@ if (!$companyDetails) {
 
 $company_image = file_exists($companyDetails['company_image']) ? $companyDetails['company_image'] : '../../static/img/company_img/default.jpg';
 
+$company_cover = !empty($companyDetails['company_cover']) && file_exists($companyDetails['company_cover'])
+    ? $companyDetails['company_cover']
+    : '../../static/img/company_img/default_cover.jpg';
+
 $jobs = [];
 $job_query = "SELECT `job_id`, `title`, `description`, `category`, `salary`, `location`, `created_at` 
             FROM `jobs` 
@@ -105,8 +109,9 @@ CloseConnection($conn);
 </nav>
 <div class="profile_card_modern">
     <div class="profile_card_inner_layout">
-        <div class="profile_card_image_section">
-            <img src="<?php echo htmlspecialchars($company_image); ?>" alt="Company Logo" class="profile_card_logo">
+        <!-- Add cover as background for the image section -->
+        <div class="profile_card_image_section" style="position:relative; background: url('<?php echo htmlspecialchars($company_cover); ?>') center center/cover no-repeat; border-radius: 12px 0 0 12px;">
+            <img src="<?php echo htmlspecialchars($company_image); ?>" alt="Company Logo" class="profile_card_logo" style="position:relative; z-index:2;">
             <?php
             $company_name = $companyDetails['company_name'] ?? '';
             $words = preg_split('/\s+/', trim($company_name));
@@ -118,6 +123,8 @@ CloseConnection($conn);
             }
             ?>
             <div class="profile_card_acronym"><?php echo htmlspecialchars($acronym); ?></div>
+            <!-- Optionally, add a semi-transparent overlay for better contrast -->
+            <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.2);z-index:1;border-radius:12px 0 0 12px;"></div>
         </div>
         <div class="profile_card_content_section">
             <div class="profile_card_name"><?php echo htmlspecialchars($companyDetails['company_name']); ?></div>

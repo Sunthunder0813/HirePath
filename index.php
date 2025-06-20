@@ -361,7 +361,7 @@ function checkLoginAndApply() {
 function checkLoginAndViewCompany(employerId) {
     <?php if (!isset($_SESSION['user_id'])): ?>
         alert("You need to log in to view the company profile. Redirecting to the sign-in page...");
-        window.open('pages/job_seeker/sign_in.php', '_blank');
+        window.open('pages/job_seeker/sign_in.php', '_self');
     <?php else: ?>
         window.location.href = `pages/job_seeker/view_company_profile.php?company_id=${encodeURIComponent(employerId)}`;
     <?php endif; ?>
@@ -400,28 +400,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var autoSelected = false;
     <?php if ($selectedJobId): ?>
-    document.querySelectorAll('.job_listings .job').forEach(function(jobDiv) {
-        if (jobDiv.getAttribute('data_job_id') == '<?php echo $selectedJobId; ?>') {
-            jobDiv.scrollIntoView({behavior: "smooth", block: "center"});
-            jobDiv.click();
-            autoSelected = true;
-        }
-    });
+    setTimeout(function() {
+        document.querySelectorAll('.job_listings .job').forEach(function(jobDiv) {
+            if (jobDiv.getAttribute('data_job_id') == '<?php echo $selectedJobId; ?>') {
+                jobDiv.scrollIntoView({behavior: "smooth", block: "center"});
+                jobDiv.click();
+                autoSelected = true;
+            }
+        });
+    }, 1300);
     <?php elseif ($isInitialLogin): ?>
-    document.querySelectorAll('.job_listings .job').forEach(function(jobDiv) {
-        if (jobDiv.getAttribute('data_job_id') == '<?php echo $selectedJobId; ?>') {
-            jobDiv.scrollIntoView({behavior: "smooth", block: "center"});
-            jobDiv.click();
+    setTimeout(function() {
+        document.querySelectorAll('.job_listings .job').forEach(function(jobDiv) {
+            if (jobDiv.getAttribute('data_job_id') == '<?php echo $selectedJobId; ?>') {
+                jobDiv.scrollIntoView({behavior: "smooth", block: "center"});
+                jobDiv.click();
+                autoSelected = true;
+            }
+        });
+    }, 1300);
+    <?php else: ?>
+    setTimeout(function() {
+        var firstJob = document.querySelector('.job_listings .job');
+        if (firstJob) {
+            firstJob.scrollIntoView({behavior: "smooth", block: "center"});
+            firstJob.click();
             autoSelected = true;
         }
-    });
-    <?php else: ?>
-    var firstJob = document.querySelector('.job_listings .job');
-    if (firstJob) {
-        firstJob.scrollIntoView({behavior: "smooth", block: "center"});
-        firstJob.click();
-        autoSelected = true;
-    }
+    }, 1300);
     <?php endif; ?>
 });
 
