@@ -27,13 +27,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
+
+        // Avoid duplicating resumes by checking for existing filenames
+        $base_name = pathinfo($file_name, PATHINFO_FILENAME);
         $unique_file_name = uniqid('resume_', true) . '.' . $file_ext;
         $file_path = $upload_dir . $unique_file_name;
 
-        if (move_uploaded_file($file_tmp, $file_path)) {
+        // Check for duplicate original filenames and append a suffix if needed
+        $original_file_path = $upload_dir . $file_name;
+        $counter = 1;
+        $final_file_name = $file_name;
+        while (file_exists($upload_dir . $final_file_name)) {
+            $final_file_name = $base_name . '_' . $counter . '.' . $file_ext;
+            $counter++;
+        }
+        $final_file_path = $upload_dir . $final_file_name;
+
+        // Move uploaded file to the unique path (by original name with suffix if needed)
+        if (move_uploaded_file($file_tmp, $final_file_path)) {
             $conn = OpenConnection();
             $stmt = $conn->prepare("INSERT INTO applications (job_id, job_seeker_id, resume_link, status, applied_at) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("iisss", $job_id, $job_seeker_id, $file_path, $status, $applied_at);
+            $stmt->bind_param("iisss", $job_id, $job_seeker_id, $final_file_path, $status, $applied_at);
 
             if ($stmt->execute()) {
                 $stmt->close();
